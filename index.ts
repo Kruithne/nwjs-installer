@@ -1,6 +1,5 @@
 import { parse } from '@kogs/argv';
 import log from '@kogs/logger';
-import https from 'node:https';
 import path from 'node:path';
 import tar from 'tar';
 import jszip from 'jszip';
@@ -12,12 +11,41 @@ try {
 
 	switch (argv.arguments[0]) {
 		case 'install': {
-			const targetVersion: string = argv.arguments.asString(1);
-			if (targetVersion === undefined)
-				throw new Error('Missing target version'); // TODO: Add help.
+			const downloadServer = argv.options.asString('downloadServer') ?? 'https://dl.nwjs.io';
 
-			if (!/^\d+\.\d+\.\d+$/.test(targetVersion))
-				throw new Error('Invalid target version'); // TODO: Add help.
+			let didAutoDetectVersion: boolean = false;
+			let targetVersion: string = argv.options.asString('version');
+			if (targetVersion === undefined) {
+				// Target version not provided, attempt to auto-detect latest version.
+				const dirList = await fetch(downloadServer).then(res => res.text());
+
+				let latest = null;
+				
+				// Match all anchor tags that contain a version number.
+				const matches = dirList.matchAll(/<a href="v([^"]+)\/">v[^<]+\/<\/a>/g);
+				for (const match of matches) {
+					const versionString = match[1];
+
+					// Match version parts: major.minor.patch[-tag].
+					const parts = versionString.match(/^(\d+)\.(\d+)\.(\d+)(-[a-z0-9]+)?$/);
+					if (parts) {
+						// Skip pre-releases (e.g. v0.11.1-beta1) when auto-detecting latest version.
+						if (parts[4] !== undefined)
+							continue;
+
+						const version = versionString.split('.').map(Number);
+
+						if (latest === null || version[0] > latest[0] || version[1] > latest[1] || version[2] > latest[2])
+							latest = version;
+					}
+				}
+
+				if (latest === null)
+					throw new Error('Failed to auto-detect latest version.');
+
+				targetVersion = latest.join('.');
+				didAutoDetectVersion = true;
+			}
 
 			let didAutoDetectPlatform: boolean = false;
 			let didAutoDetectArch: boolean = false;
@@ -49,7 +77,7 @@ try {
 			const extension: string = archiveType === 'tar' ? '.tar.gz' : '.zip'; // TODO: Allow custom extension to be provided.
 
 			log.info('Installing nw.js in {%s}', targetDir);
-			log.info('Target Version: {%s}', targetVersion);
+			log.info('Target Version: {%s}' + (didAutoDetectVersion ? ' (auto-detected)' : ''), targetVersion);
 			log.info('Target Platform: {%s}' + (didAutoDetectPlatform ? ' (auto-detected)' : ''), platform);
 			log.info('Target Arch: {%s}' + (didAutoDetectArch ? ' (auto-detected)' : ''), arch);
 			log.info('Using SDK: {%s}', isSDK ? 'yes' : 'no');
