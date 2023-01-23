@@ -1,0 +1,13 @@
+# This file controls what files are ignored in source control (git).
+
+# Ignore Node.js dependencies directory.
+node_modules
+
+# Ignore compiled TypeScript files.
+*.js
+
+# Ignore generated TypeScript definition files.
+*.d.ts
+
+# Don't ignore test files.
+!*.test.js

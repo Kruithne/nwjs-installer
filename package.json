@@ -1,0 +1,39 @@
+{
+	"name": "@kogs/nwjs",
+	"version": "1.0.0",
+	"type": "module",
+	"description": "Command line utility for building nw.js apps",
+	"main": "index.js",
+	"scripts": {
+		"test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Kruithne/kogs-nwjs.git"
+	},
+	"keywords": [
+		"nwjs",
+		"node-webkit",
+		"build"
+	],
+	"author": "Kruithne (kruithne@gmail.com)",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Kruithne/kogs-nwjs/issues"
+	},
+	"homepage": "https://github.com/Kruithne/kogs-nwjs/#readme",
+	"dependencies": {
+		"@kogs/argv": "^1.0.0",
+		"@kogs/logger": "^3.3.7",
+		"jszip": "^3.10.1",
+		"tar": "^6.1.13"
+	},
+	"devDependencies": {
+		"@types/node": "^18.11.18",
+		"@typescript-eslint/eslint-plugin": "^5.48.2",
+		"@typescript-eslint/parser": "^5.48.2",
+		"eslint": "^8.32.0",
+		"eslint-plugin-jest": "^27.2.1",
+		"jest": "^29.3.1"
+	}
+}
