@@ -7,6 +7,9 @@
 	"scripts": {
 		"test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
 	},
+	"bin":  {
+		"nwjs": "./index.js"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/Kruithne/kogs-nwjs.git"

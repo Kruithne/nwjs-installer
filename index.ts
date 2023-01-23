@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { parse } from '@kogs/argv';
 import log from '@kogs/logger';
 import path from 'node:path';
