@@ -80,19 +80,11 @@ try {
 			} else {
 				log.info('Downloading archive from {%s}', downloadURL);
 
-				await new Promise<void>((resolve, reject) => {
-					https.get(downloadURL, res => {
-						if (res.statusCode !== 200)
-							return reject('Download server returned HTTP response {' + res.statusCode + '}');
+				const res = await fetch(downloadURL);
+				if (!res.ok)
+					throw new Error('Download server returned HTTP {' + res.status + '}: ' + res.statusText);
 
-						const chunks = [];
-						res.on('data', chunk => chunks.push(chunk));
-						res.on('end', () => {
-							data = Buffer.concat(chunks);
-							resolve();
-						});
-					});
-				});
+				data = Buffer.from(await res.arrayBuffer());
 
 				if (useCache) {
 					fs.writeFileSync(cachePath, data);
