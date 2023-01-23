@@ -32,6 +32,9 @@ jobs:
       - name: Compile TypeScript
         run: tsc
 
+      - name: Install global bin
+        run: npm install -g
+
       - name: Run tests
         run: npm test
         
