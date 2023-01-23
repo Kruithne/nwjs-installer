@@ -20,13 +20,13 @@ npm install @kogs/nwjs -g
 Usage: nwjs <command> [options]
 
 Commands:
-  install [version]		Install a specific version of nw.js.
+  install [version]     Install a specific version of nw.js.
 
 Options:
-  --sdk					Install the SDK build instead of the production build.
-  --no-cache		 	Disable caching of downloaded builds.
-  --platform <string>	Override the platform to install for.
-  --arch <string>		Override the architecture to install for.
+  --sdk                 Install the SDK build instead of the production build.
+  --no-cache            Disable caching of downloaded builds.
+  --platform <string>   Override the platform to install for.
+  --arch <string>       Override the architecture to install for.
 ```
 
 ## Documentation
