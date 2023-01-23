@@ -26,6 +26,9 @@ jobs:
       - name: Install node dependencies
         run: npm ci
 
+      - name: ESLint check
+        run: npx eslint .
+
       - name: Install TypeScript
         run: npm install -g typescript
 
@@ -37,6 +40,3 @@ jobs:
 
       - name: Run tests
         run: npm test
-        
-      - name: ESLint check
-        run: npx eslint .
