@@ -23,6 +23,7 @@ Commands:
   install [version]     Install a specific version of nw.js.
 
 Options:
+  --version             Specify a version to install (e.g 0.49.2)
   --sdk                 Install the SDK build instead of the production build.
   --no-cache            Disable caching of downloaded builds.
   --platform <string>   Override the platform to install for.
