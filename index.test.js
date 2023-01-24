@@ -560,3 +560,101 @@ test('cmd: nwjs --version 0.49.2 --downloadServer=localhost', async () => {
 	const cacheFiles = fs.readdirSync(CACHCE_DIR);
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 });
+
+test('cmd: nwjs --version 0.49.2 --sdk', () => {
+	// Run the command.
+	execSync(`nwjs --version 0.49.2 --sdk`, EXEC_OPTS);
+
+	// Check nw.js SDK was installed.
+	if (process.platform === 'linux') {
+		expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
+		expect(fs.existsSync(path.join(TEST_DIR, 'nwjc'))).toBe(true);
+	} else if (process.platform === 'win32') {
+		expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
+		expect(fs.existsSync(path.join(TEST_DIR, 'nwjc.exe'))).toBe(true);
+	} else if (process.platform === 'darwin') {
+		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
+		expect(fs.existsSync(path.join(TEST_DIR, 'nwjc'))).toBe(true);
+	}
+
+	// Cache should contain the exact SDK version specified.
+	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	expect(cacheFiles.find(e => e.match(/nwjs-sdk-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
+});
+
+test('cmd: nwjs --version 0.48.0-beta1 (pre-release)', () => {
+	// Run the command.
+	execSync(`nwjs --version 0.48.0-beta1`, EXEC_OPTS);
+
+	// Check nw.js was installed.
+	if (process.platform === 'linux')
+		expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
+	else if (process.platform === 'win32')
+		expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
+	else if (process.platform === 'darwin')
+		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
+
+	// Cache should contain the exact version specified.
+	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	expect(cacheFiles.find(e => e.match(/nwjs-v0\.48\.0-beta1-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
+});
+
+test('cmd: nwjs --version 0.49.2 --platform win --arch x64', () => {
+	// Run the command.
+	execSync(`nwjs --platform win --arch x64`, EXEC_OPTS);
+
+	// Check nw.js was installed.
+	expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
+
+	// Cache should contain the exact platform and arch specified.
+	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-win-x64\.zip/))).not.toBeUndefined();
+});
+
+test('cmd: nwjs --version 0.49.2 --platform win --arch ia32', () => {
+	// Run the command.
+	execSync(`nwjs --platform win --arch ia32`, EXEC_OPTS);
+
+	// Check nw.js was installed.
+	expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
+
+	// Cache should contain the exact platform and arch specified.
+	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-win-ia32\.zip/))).not.toBeUndefined();
+});
+
+test('cmd: nwjs --version 0.49.2 --platform linux --arch x64', () => {
+	// Run the command.
+	execSync(`nwjs --platform linux --arch x64`, EXEC_OPTS);
+
+	// Check nw.js was installed.
+	expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
+
+	// Cache should contain the exact platform and arch specified.
+	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-linux-x64\.tar\.gz/))).not.toBeUndefined();
+});
+
+test('cmd: nwjs --version 0.49.2 --platform linux --arch ia32', () => {
+	// Run the command.
+	execSync(`nwjs --platform linux --arch ia32`, EXEC_OPTS);
+
+	// Check nw.js was installed.
+	expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
+
+	// Cache should contain the exact platform and arch specified.
+	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-linux-ia32\.tar\.gz/))).not.toBeUndefined();
+});
+
+test('cmd: nwjs --version 0.49.2 --platform osx --arch x64', () => {
+	// Run the command.
+	execSync(`nwjs --platform osx --arch x64`, EXEC_OPTS);
+
+	// Check nw.js was installed.
+	expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
+
+	// Cache should contain the exact platform and arch specified.
+	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-osx-x64\.zip/))).not.toBeUndefined();
+});
