@@ -52,13 +52,13 @@ try {
 	if (platform === undefined) {
 		// Automatically detect platform if not provided.
 		didAutoDetectPlatform = true;
-
 		platform = process.platform;
-		if (platform === 'win32') // win32 (node.js) -> win (nw.js)
-			platform = 'win';
-		else if (platform === 'darwin') // darwin (node.js) -> osx (nw.js)
-			platform = 'osx';
 	}
+
+	if (platform === 'win32') // win32 (node.js) -> win (nw.js)
+		platform = 'win';
+	else if (platform === 'darwin') // darwin (node.js) -> osx (nw.js)
+		platform = 'osx';
 
 	let arch: string = argv.options.asString('arch');
 	if (arch === undefined) {
