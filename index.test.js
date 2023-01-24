@@ -601,7 +601,7 @@ test('cmd: nwjs --version 0.48.0-beta1 (pre-release)', () => {
 
 test('cmd: nwjs --version 0.49.2 --platform win --arch x64', () => {
 	// Run the command.
-	execSync(`nwjs --platform win --arch x64`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2 --platform win --arch x64`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
@@ -613,7 +613,7 @@ test('cmd: nwjs --version 0.49.2 --platform win --arch x64', () => {
 
 test('cmd: nwjs --version 0.49.2 --platform win --arch ia32', () => {
 	// Run the command.
-	execSync(`nwjs --platform win --arch ia32`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2 --platform win --arch ia32`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
@@ -625,7 +625,7 @@ test('cmd: nwjs --version 0.49.2 --platform win --arch ia32', () => {
 
 test('cmd: nwjs --version 0.49.2 --platform linux --arch x64', () => {
 	// Run the command.
-	execSync(`nwjs --platform linux --arch x64`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2 --platform linux --arch x64`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
@@ -637,7 +637,7 @@ test('cmd: nwjs --version 0.49.2 --platform linux --arch x64', () => {
 
 test('cmd: nwjs --version 0.49.2 --platform linux --arch ia32', () => {
 	// Run the command.
-	execSync(`nwjs --platform linux --arch ia32`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2 --platform linux --arch ia32`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
@@ -649,7 +649,7 @@ test('cmd: nwjs --version 0.49.2 --platform linux --arch ia32', () => {
 
 test('cmd: nwjs --version 0.49.2 --platform osx --arch x64', () => {
 	// Run the command.
-	execSync(`nwjs --platform osx --arch x64`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2 --platform osx --arch x64`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
