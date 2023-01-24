@@ -37,6 +37,7 @@ Options:
 - [Caching](#caching) - Cache downloaded builds to avoid unnecessary downloads.
 - [Development Build (SDK)](#development-build-sdk) - Install the SDK flavor instead of the normal flavor.
 - [Download Server](#download-server) - Override the default download server to use.
+- [Locales](#locale) - Automatically remove locale files that you won't use.
 
 ### Verions
 
@@ -113,6 +114,22 @@ Notes on custom download servers:
 - The server is expecting an Apache-style directory listing.
 - Builds are scraped using `/<a href="v([^"]+)\/">v[^<]+\/<\/a>/g`
 - Versions must match `/^(\d+)\.(\d+)\.(\d+)(-[a-z0-9]+)?$/`
+
+### Locale
+
+By default, builds come with locale files for [all languages supported by Chromium](https://chromium.googlesource.com/chromium/src/build/config/+/refs/heads/main/locales.gni). According to the [developer of nw.js](https://github.com/nwjs/nw.js/issues/2244#issuecomment-379977958), it is safe to remove locale files that you won't be using.
+
+`@kogs/nwjs` makes this simple with the `--locale <locales>` option, where `<locales>` is a comma-separated list of locales to include.
+
+```bash
+nwjs --locale "sw,en-GB,en_US"
+```
+
+Notes on locale:
+- You should use the locale IDs that Chromium uses, not platform-specific variations. For example, don't use `en` (OSX variation) for `en-US`, `@kogs/nwjs` will automatically adjust this when building for OSX.
+- The locale files **are** not related to the language content of your application, it is related to the environment in which the application will be deployed. **Do not** exclude locale files unless you are 100% sure of the locale of the computers your application will be deployed onto.
+- The use of hyphens and underscores differs between platforms, as such you can use either and `@kogs/nwjs` will automatically adjust them depending on the target platform (e.g `en-gb` == `en_gb`).
+- Locale flags are case-insensitive (e.g `en-GB` == `en-gb`).
 
 ## What is `@kogs`?
 `@kogs` is a collection of packages that I've written to consolidate the code I often reuse across my projects with the following goals in mind:

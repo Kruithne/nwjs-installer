@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { parse } from '@kogs/argv';
-import log from '@kogs/logger';
+import log, { formatArray } from '@kogs/logger';
 import path from 'node:path';
 import tar from 'tar';
 import jszip from 'jszip';
@@ -70,6 +70,7 @@ try {
 	const useCache: boolean = !argv.options.asBoolean('noCache');
 	const isSDK: boolean = argv.options.asBoolean('sdk') ?? false;
 	const targetDir: string = argv.options.asString('targetDir') ?? process.cwd();
+	const locale: string[] = argv.options.asArray('locale') ?? [];
 
 	const archiveType: string = platform === 'linux' ? 'tar' : 'zip'; // TODO: Allow custom archive type to be provided.
 	const extension: string = archiveType === 'tar' ? '.tar.gz' : '.zip'; // TODO: Allow custom extension to be provided.
@@ -78,6 +79,7 @@ try {
 	log.info('Target Version: {%s}' + (didAutoDetectVersion ? ' (auto-detected)' : ''), targetVersion);
 	log.info('Target Platform: {%s}' + (didAutoDetectPlatform ? ' (auto-detected)' : ''), platform);
 	log.info('Target Arch: {%s}' + (didAutoDetectArch ? ' (auto-detected)' : ''), arch);
+	log.info('Include Locale: ' + (locale.length > 0 ? formatArray(locale) : '{all}'));
 	log.info('Using SDK: {%s}', isSDK ? 'yes' : 'no');
 	log.blank();
 
@@ -117,6 +119,30 @@ try {
 		}
 	}
 
+	// Lowercase all provided locales for comparison.
+	let localeStrings = locale.map(e => e.toLowerCase());
+	
+	// OSX uses underscores instead of hyphens, and 'en-US' is 'en'.
+	// See: https://chromium.googlesource.com/chromium/src/build/config/+/refs/heads/main/locales.gni#250
+	localeStrings = localeStrings.map(platform === 'osx' ? e => e.replace('-', '_') : e => e.replace('_', '-'));
+	if (platform === 'osx') {
+		if (localeStrings.includes('en_us'))
+			localeStrings.push('en');
+	}
+
+	const localeFilter = (entry: string) => {
+		if (locale.length === 0)
+			return true;
+
+		let match: RegExpMatchArray | null;
+		if (platform === 'osx')
+			match = entry.match(/^nwjs.app\/Contents\/Resources\/([^.]+)\.lproj\/InfoPlist.strings$/);
+		else
+			match = entry.match(/^locales\/([^.]+)\.pak(\.info|)$/);
+
+		return match ? localeStrings.includes(match[1].toLowerCase()) : true;
+	};
+
 	if (archiveType === 'tar') {
 		const extract = tar.list({
 			onentry: (entry: tar.Header) => {
@@ -130,6 +156,11 @@ try {
 
 				const filePath = path.join(targetDir, entryPath);
 				const fileDir = path.dirname(filePath);
+
+				if (!localeFilter(entryPath)) {
+					log.info('Skipping {%s} (does not match --locale)', filePath);
+					return;
+				}
 
 				// Ensure directory exists.
 				fs.mkdirSync(fileDir, { recursive: true });
@@ -153,6 +184,11 @@ try {
 
 			const filePath = path.join(targetDir, entryPath);
 			const fileDir = path.dirname(filePath);
+
+			if (!localeFilter(entryPath)) {
+				log.info('Skipping {%s} (does not match --locale)', filePath);
+				return;
+			}
 
 			// Ensure directory exists.
 			fs.mkdirSync(fileDir, { recursive: true });

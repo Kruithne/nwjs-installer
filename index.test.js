@@ -675,3 +675,33 @@ test('cmd: nwjs --version 0.49.2 --target-dir tmp2', () => {
 	else if (process.platform === 'darwin')
 		expect(fs.existsSync(path.join('tmp2', 'nwjs.app'))).toBe(true);
 });
+
+test('cmd: nwjs --version 0.49.2 --locale "el,en-GB,en_US"', () => {
+	// Run the command.
+	execSync(`nwjs --version 0.49.2 --locale "el,en-GB,en_US"`, EXEC_OPTS);
+
+	// Check if the locale files are the only ones downloaded.
+	if (process.platform === 'linux' || process.platform === 'win32') {
+		const localeFiles = fs.readdirSync(path.join(TEST_DIR, 'locales'));
+		expect(localeFiles.length).toBe(6); // .pak + .pak.info
+
+		expect(localeFiles.includes('el.pak')).toBe(true);
+		expect(localeFiles.includes('el.pak.info')).toBe(true);
+		expect(localeFiles.includes('en-GB.pak')).toBe(true);
+		expect(localeFiles.includes('en-GB.pak.info')).toBe(true);
+		expect(localeFiles.includes('en-US.pak')).toBe(true);
+		expect(localeFiles.includes('en-US.pak.info')).toBe(true);
+	} else if (process.platform === 'darwin') {
+		const localeFiles = fs.readdirSync(path.join(TEST_DIR, 'nwjs.app', 'Contents', 'Resources'));
+		expect(localeFiles.length).toBe(7);
+		expect(localeFiles.includes('el.lproj')).toBe(true);
+		expect(localeFiles.includes('en_GB.lproj')).toBe(true);
+		expect(localeFiles.includes('en.lproj')).toBe(true); // OSX uses en.lproj for en-US.
+		
+		// Other things included are: io.nwjs.nwjs.manifest, app.icns, document.icns, scripting.sdef
+		expect(localeFiles.includes('io.nwjs.nwjs.manifest')).toBe(true);
+		expect(localeFiles.includes('app.icns')).toBe(true);
+		expect(localeFiles.includes('document.icns')).toBe(true);
+		expect(localeFiles.includes('scripting.sdef')).toBe(true);
+	}
+});
