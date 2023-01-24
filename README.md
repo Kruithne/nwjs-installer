@@ -121,6 +121,8 @@ By default, builds come with locale files for [all languages supported by Chromi
 
 `@kogs/nwjs` makes this simple with the `--locale <locales>` option, where `<locales>` is a comma-separated list of locales to include.
 
+You can find a list of locales supported by Chromium [here](https://chromium.googlesource.com/chromium/src/build/config/+/refs/heads/main/locales.gni).
+
 ```bash
 nwjs --locale "sw,en-GB,en_US"
 ```
