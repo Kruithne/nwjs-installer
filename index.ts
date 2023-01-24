@@ -90,7 +90,6 @@ try {
 	const versionName: string = ['nwjs', isSDK ? 'sdk' : '', versionTag, platform, arch].filter(Boolean).join('-');
 	const fileName: string = versionName + extension;
 
-	// TODO: Allow custom URL to be provided.
 	const downloadURL: string = path.posix.join(downloadServer, versionTag, fileName);
 
 	const cacheDir: string = path.join(os.tmpdir(), 'kogs-nwjs-cache');
