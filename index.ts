@@ -94,7 +94,7 @@ try {
 			const fileName: string = versionName + extension;
 
 			// TODO: Allow custom URL to be provided.
-			const downloadURL: string = 'https://dl.nwjs.io/' + versionTag + '/' + fileName;
+			const downloadURL: string = path.posix.join(downloadServer, versionTag, fileName);
 
 			const cacheDir: string = path.join(os.tmpdir(), 'kogs-nwjs-cache');
 			const cachePath: string = path.join(cacheDir, fileName);
