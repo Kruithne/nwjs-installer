@@ -5,7 +5,8 @@
 	"description": "Command line utility for building nw.js apps",
 	"main": "index.js",
 	"scripts": {
-		"test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
+		"test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
+		"nwjs": "node --no-warnings index.js"
 	},
 	"bin":  {
 		"nwjs": "./index.js"
