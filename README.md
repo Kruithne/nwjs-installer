@@ -20,6 +20,7 @@ npm install @kogs/nwjs -g
 Usage: nwjs [options]
 
 Options:
+  --target-dir          Specify a target directory to install to.
   --version             Specify a version to install (e.g 0.49.2)
   --sdk                 Install the SDK flavor instead of the normal flavor.
   --no-cache            Disable caching of downloaded builds.
@@ -31,6 +32,7 @@ Options:
 ## Documentation
 
 - [Versions](#versions) - Specify a specific version of nw.js to install.
+- [Target Directory](#target-directory) - Specify a target directory to install to.
 - [Platform / Architecture](#platform--architecture) - Override the platform and architecture to install for.
 - [Caching](#caching) - Cache downloaded builds to avoid unnecessary downloads.
 - [Development Build (SDK)](#development-build-sdk) - Install the SDK flavor instead of the normal flavor.
@@ -48,6 +50,15 @@ If no version is specified, the latest stable version will be installed. This is
 ```bash
 nwjs # No version, latest is installed.
 ```
+
+### Target Directory
+
+By default, nw.js will be installed in the current working directory. To specify your own target directory, use the `--target-dir` option.
+
+```bash
+nwjs --target-dir /path/to/target # Installs to /path/to/target.
+```
+Keep in mind that files will be overwritten if they already exist in the target directory.
 
 ### Platform / Architecture
 

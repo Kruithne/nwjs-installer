@@ -658,3 +658,20 @@ test('cmd: nwjs --version 0.49.2 --platform osx --arch x64', () => {
 	const cacheFiles = fs.readdirSync(CACHCE_DIR);
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-osx-x64\.zip/))).not.toBeUndefined();
 });
+
+test('cmd: nwjs --version 0.49.2 --target-dir tmp2', () => {
+	// If tmp2 exists, delete it.
+	if (fs.existsSync(path.join('tmp2')))
+		fs.rmdirSync(path.join('tmp2'), { recursive: true });
+
+	// Run the command.
+	execSync(`nwjs --version 0.49.2 --target-dir tmp2`, EXEC_OPTS);
+
+	// Check nw.js was installed.
+	if (process.platform === 'linux')
+		expect(fs.existsSync(path.join('tmp2', 'nw'))).toBe(true);
+	else if (process.platform === 'win32')
+		expect(fs.existsSync(path.join('tmp2', 'nw.exe'))).toBe(true);
+	else if (process.platform === 'darwin')
+		expect(fs.existsSync(path.join('tmp2', 'nwjs.app'))).toBe(true);
+});
