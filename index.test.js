@@ -69,7 +69,7 @@ test('cmd: nwjs --version 0.49.2', () => {
         expect(fs.existsSync(path.join(TEST_DIR, 'locales'))).toBe(true);
         expect(fs.existsSync(path.join(TEST_DIR, 'swiftshader'))).toBe(true);
         expect(fs.existsSync(path.join(TEST_DIR, 'lib', 'libEGL.so'))).toBe(true);
-        expect(fs.existsSync(path.join(TEST_DIR, 'lib', 'libffmepg.so'))).toBe(true);
+        expect(fs.existsSync(path.join(TEST_DIR, 'lib', 'libffmpeg.so'))).toBe(true);
         expect(fs.existsSync(path.join(TEST_DIR, 'lib', 'libGLESv2.so'))).toBe(true);
         expect(fs.existsSync(path.join(TEST_DIR, 'lib', 'libnw.so'))).toBe(true);
         expect(fs.existsSync(path.join(TEST_DIR, 'lib', 'libnode.so'))).toBe(true);
