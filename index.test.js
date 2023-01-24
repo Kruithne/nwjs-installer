@@ -179,8 +179,8 @@ test('cmd: nwjs --version 0.49.2', () => {
 		expect(fs.existsSync(path.join(TEST_DIR, 'locales', 'zh-CN.pak.info'))).toBe(true);
 		expect(fs.existsSync(path.join(TEST_DIR, 'locales', 'zh-TW.pak'))).toBe(true);
 		expect(fs.existsSync(path.join(TEST_DIR, 'locales', 'zh-TW.pak.info'))).toBe(true);
-		expect(fs.existsSync(path.join('swiftshader', 'libEGL.so'))).toBe(true);
-		expect(fs.existsSync(path.join('swiftshader', 'libGLESv2.so'))).toBe(true);
+		expect(fs.existsSync(path.join(TEST_DIR, 'swiftshader', 'libEGL.so'))).toBe(true);
+		expect(fs.existsSync(path.join(TEST_DIR, 'swiftshader', 'libGLESv2.so'))).toBe(true);
 	} else if (process.platform === 'win32') {
 		expect(fs.existsSync(path.join(TEST_DIR, 'credits.html'))).toBe(true);
         expect(fs.existsSync(path.join(TEST_DIR, 'd3dcompiler_47.dll'))).toBe(true);
