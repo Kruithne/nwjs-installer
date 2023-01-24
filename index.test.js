@@ -30,7 +30,7 @@ afterEach(() => {
 		fs.rmdirSync(TEST_DIR, { recursive: true });
 });
 
-test('cmd: nwjs install', () => {
+test('cmd: nwjs', () => {
 	// Expect default behavior:
 	// - nw.js will be installed into the current working directory (which is TEST_DIR).
 	// - Latest version of nw.js will automatically be downloaded.
@@ -38,7 +38,7 @@ test('cmd: nwjs install', () => {
 	// - ZIP/TAR will be cached in the operating system's temp directory.
 	// - Build flavor should be "normal" not "sdk".
 	// - Build should not be a pre-release.
-	execSync(`nwjs install`, EXEC_OPTS);
+	execSync(`nwjs`, EXEC_OPTS);
 
 	// Expect the nw.js executable to be in the current working directory.
 	if (process.platform === 'linux')
@@ -53,9 +53,9 @@ test('cmd: nwjs install', () => {
 	expect(cacheFiles[0]).toMatch(/nwjs-v\d+\.\d+\.\d+-\w+-\w+\.(zip|tar\.gz)/);
 });
 
-test('cmd: nwjs install --version 0.49.2', () => {
+test('cmd: nwjs --version 0.49.2', () => {
 	// Expect the specified version to be installed.
-	execSync(`nwjs install --version 0.49.2`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2`, EXEC_OPTS);
 
 	if (process.platform === 'linux') {
 		expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
@@ -470,14 +470,14 @@ test('cmd: nwjs install --version 0.49.2', () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs install --version 0.49.2 (cache check)', () => {
+test('cmd: nwjs --version 0.49.2 (cache check)', () => {
 	// Get the mtime of the cache file.
 	const cacheFiles = fs.readdirSync(CACHCE_DIR);
 	const cacheFile = cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/));
 	const cacheFileMtime = fs.statSync(path.join(CACHCE_DIR, cacheFile)).mtimeMs;
 
 	// Run the command.
-	execSync(`nwjs install --version 0.49.2`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2`, EXEC_OPTS);
 
 	// Cache file should not have been modified.
 	expect(fs.statSync(path.join(CACHCE_DIR, cacheFile)).mtimeMs).toBe(cacheFileMtime);
@@ -491,14 +491,14 @@ test('cmd: nwjs install --version 0.49.2 (cache check)', () => {
 		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
 });
 
-test('cmd: nwjs install --version 0.49.2 --no-cache', () => {
+test('cmd: nwjs --version 0.49.2 --no-cache', () => {
 	// Purposely poison the cache so that we can test that it's not used.
 	const cacheFiles = fs.readdirSync(CACHCE_DIR);
 	const cacheFile = cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/));
 	fs.writeFileSync(path.join(CACHCE_DIR, cacheFile), 'poisoned');
 
 	// Run the command.
-	execSync(`nwjs install --version 0.49.2 --no-cache`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2 --no-cache`, EXEC_OPTS);
 
 	// Cache file should be untouched.
 	expect(fs.readFileSync(path.join(CACHCE_DIR, cacheFile), 'utf8')).toBe('poisoned');
@@ -515,7 +515,7 @@ test('cmd: nwjs install --version 0.49.2 --no-cache', () => {
 	fs.unlinkSync(path.join(CACHCE_DIR, cacheFile));
 });
 
-test('cmd: nwjs install --version 0.49.2 --downloadServer=localhost', async () => {
+test('cmd: nwjs --version 0.49.2 --downloadServer=localhost', async () => {
 	// Create a proxy server to test the download server option.
 	const server = http.createServer((req, res) => {
 		const proxyUrl = url.parse(`http://dl.nwjs.io${req.url}`);
@@ -543,7 +543,7 @@ test('cmd: nwjs install --version 0.49.2 --downloadServer=localhost', async () =
 		fs.rmdirSync(CACHCE_DIR, { recursive: true });
 
 	// Run the command.
-	execSync(`nwjs install --version 0.49.2 --downloadServer=http://localhost:${port}`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2 --downloadServer=http://localhost:${port}`, EXEC_OPTS);
 
 	// Stop the server.
 	await new Promise(resolve => server.close(resolve));

@@ -17,10 +17,7 @@ npm install @kogs/nwjs -g
 
 ## Usage
 ```bash
-Usage: nwjs <command> [options]
-
-Commands:
-  install [version]     Install a specific version of nw.js.
+Usage: nwjs [options]
 
 Options:
   --version             Specify a version to install (e.g 0.49.2)
