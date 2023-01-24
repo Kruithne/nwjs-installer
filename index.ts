@@ -72,7 +72,7 @@ try {
 
 			const useCache: boolean = !argv.options.asBoolean('noCache');
 			const isSDK: boolean = argv.options.asBoolean('sdk') ?? false;
-			const targetDir: string = path.join(process.cwd(), 'tmp'); // TODO: Allow target dir to be provided?
+			const targetDir: string = process.cwd(); // TODO: Allow target dir to be provided?
 
 			const archiveType: string = platform === 'linux' ? 'tar' : 'zip'; // TODO: Allow custom archive type to be provided.
 			const extension: string = archiveType === 'tar' ? '.tar.gz' : '.zip'; // TODO: Allow custom extension to be provided.
