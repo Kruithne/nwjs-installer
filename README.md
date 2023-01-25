@@ -20,6 +20,7 @@ npm install @kogs/nwjs -g
 Usage: nwjs [options]
 
 Options:
+  --help                Show this help message.
   --target-dir          Specify a target directory to install to.
   --version             Specify a version to install (e.g 0.49.2)
   --sdk                 Install the SDK flavor instead of the normal flavor.
