@@ -27,6 +27,7 @@ Options:
   --platform <string>   Override the platform to install for.
   --arch <string>       Override the architecture to install for.
   --download-server     Override the default download server to use.
+  --locale <a,b,c..>    Define which locales to include in the build (defaults: all).
 ```
 
 ## Documentation
