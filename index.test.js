@@ -707,7 +707,7 @@ test('cmd: nwjs --version 0.49.2 --locale "el,en-GB,en_US"', () => {
 	}
 });
 
-test('cmd: nwjs --remove-pak-info', () => {
+test('cmd: nwjs --version 0.49.2 --remove-pak-info', () => {
 	// See: https://bitbucket.org/chromiumembedded/cef/issues/2375
 	if (process.platform === 'linux' || process.platform === 'win32') {
 		// Run the command.
