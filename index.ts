@@ -123,7 +123,7 @@ try {
 	log.info('Target Version: {%s}' + (didAutoDetectVersion ? ' (auto-detected)' : ''), targetVersion);
 	log.info('Target Platform: {%s}' + (didAutoDetectPlatform ? ' (auto-detected)' : ''), platform);
 	log.info('Target Arch: {%s}' + (didAutoDetectArch ? ' (auto-detected)' : ''), arch);
-	log.info('Locale: ' + (locale.length > 0 ? formatArray(locale) : '{all}') + (removePakInfo ? ' (no pak info)' : ''));
+	log.info('Locale: ' + (locale.length > 0 ? formatArray(locale) : '{all}') + (removePakInfo ? ' (removing pak info)' : ''));
 	log.info('Using SDK: {%s}', isSDK ? 'yes' : 'no');
 	if (excludePattern !== undefined)
 		log.info('Excluding: {%s}', excludePattern);
@@ -176,7 +176,8 @@ try {
 	}
 
 	const localeFilter = (entry: string) => {
-		if (locale.length === 0)
+		const skipLocale = locale.length === 0;
+		if (skipLocale && !removePakInfo)
 			return true;
 
 		let match: RegExpMatchArray | null;
@@ -191,7 +192,7 @@ try {
 				return false;
 		}
 
-		return match ? localeStrings.includes(match[1].toLowerCase()) : true;
+		return skipLocale || (match ? localeStrings.includes(match[1].toLowerCase()) : true);
 	};
 
 	const excludeRegExp = excludePattern ? new RegExp(excludePattern, 'i') : undefined;
