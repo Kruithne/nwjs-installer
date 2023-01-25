@@ -28,6 +28,7 @@ Options:
   --arch <string>       Override the architecture to install for.
   --download-server     Override the default download server to use.
   --locale <a,b,c..>    Define which locales to include in the build (defaults: all).
+  --remove-pak-info     Remove .pak.info files to reduce the size of the build.
 ```
 
 ## Documentation
@@ -39,6 +40,7 @@ Options:
 - [Development Build (SDK)](#development-build-sdk) - Install the SDK flavor instead of the normal flavor.
 - [Download Server](#download-server) - Override the default download server to use.
 - [Locales](#locale) - Automatically remove locale files that you won't use.
+- [Remove .pak.info](#remove-pakinfo) - Remove .pak.info files to reduce the size of the build.
 
 ### Verions
 
@@ -133,6 +135,18 @@ Notes on locale:
 - The locale files **are** not related to the language content of your application, it is related to the environment in which the application will be deployed. **Do not** exclude locale files unless you are 100% sure of the locale of the computers your application will be deployed onto.
 - The use of hyphens and underscores differs between platforms, as such you can use either and `@kogs/nwjs` will automatically adjust them depending on the target platform (e.g `en-gb` == `en_gb`).
 - Locale flags are case-insensitive (e.g `en-GB` == `en-gb`).
+
+### Remove .pak.info
+
+During the Chromium build process for Windows and Linux builds, a `.pak.info` file is generated for each `.pak` file in `/locales`. [Since 2018, CEF has been removing these files](https://bitbucket.org/chromiumembedded/cef/issues/2375) as part of their build script, but nw.js still includes them.
+
+These files are not needed and can be safely removed. To help with this, `@kogs/nwjs` will automatically remove these if the `--remove-pak-info` option is used.
+
+```bash
+nwjs --remove-pak-info # Removes .pak.info files.
+```
+
+The `--remove-pak-info` is a more convinient and readable way of doing `--exclude "^locales\/([^.]+)\.pak\.info|$"` (see [Excluding Files](#excluding-files)) and skips OSX builds as they do not include these files.
 
 ## What is `@kogs`?
 `@kogs` is a collection of packages that I've written to consolidate the code I often reuse across my projects with the following goals in mind:

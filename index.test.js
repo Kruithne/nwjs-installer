@@ -706,3 +706,15 @@ test('cmd: nwjs --version 0.49.2 --locale "el,en-GB,en_US"', () => {
 		expect(localeFiles.includes('scripting.sdef')).toBe(true);
 	}
 });
+
+test('cmd: nwjs --remove-pak-info', () => {
+	// See: https://bitbucket.org/chromiumembedded/cef/issues/2375
+	if (process.platform === 'linux' || process.platform === 'win32') {
+		// Run the command.
+		execSync(`nwjs --version 0.49.2 --remove-pak-info`, EXEC_OPTS);
+
+		// Check there are no .pak.info files extracted to /locales
+		const localeFiles = fs.readdirSync(path.join(TEST_DIR, 'locales'));
+		expect(localeFiles.find(e => e.match(/\.pak\.info$/))).toBeUndefined();
+	}
+});

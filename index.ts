@@ -71,6 +71,7 @@ try {
 	const isSDK: boolean = argv.options.asBoolean('sdk') ?? false;
 	const targetDir: string = argv.options.asString('targetDir') ?? process.cwd();
 	const locale: string[] = argv.options.asArray('locale') ?? [];
+	const removePakInfo: boolean = argv.options.asBoolean('removePakInfo') ?? false;
 
 	const archiveType: string = platform === 'linux' ? 'tar' : 'zip'; // TODO: Allow custom archive type to be provided.
 	const extension: string = archiveType === 'tar' ? '.tar.gz' : '.zip'; // TODO: Allow custom extension to be provided.
@@ -79,7 +80,7 @@ try {
 	log.info('Target Version: {%s}' + (didAutoDetectVersion ? ' (auto-detected)' : ''), targetVersion);
 	log.info('Target Platform: {%s}' + (didAutoDetectPlatform ? ' (auto-detected)' : ''), platform);
 	log.info('Target Arch: {%s}' + (didAutoDetectArch ? ' (auto-detected)' : ''), arch);
-	log.info('Include Locale: ' + (locale.length > 0 ? formatArray(locale) : '{all}'));
+	log.info('Locale: ' + (locale.length > 0 ? formatArray(locale) : '{all}') + (removePakInfo ? ' (no pak info)' : ''));
 	log.info('Using SDK: {%s}', isSDK ? 'yes' : 'no');
 	log.blank();
 
@@ -135,10 +136,16 @@ try {
 			return true;
 
 		let match: RegExpMatchArray | null;
-		if (platform === 'osx')
+		if (platform === 'osx') {
 			match = entry.match(/^nwjs.app\/Contents\/Resources\/([^.]+)\.lproj\/InfoPlist.strings$/);
-		else
+		} else {
 			match = entry.match(/^locales\/([^.]+)\.pak(\.info|)$/);
+
+			// Remove .pak.info files if --remove-pak-info is set.
+			// See: https://bitbucket.org/chromiumembedded/cef/issues/2375
+			if (removePakInfo && match?.[2] === '.info')
+				return false;
+		}
 
 		return match ? localeStrings.includes(match[1].toLowerCase()) : true;
 	};
