@@ -9,6 +9,14 @@ import fs from 'node:fs';
 
 try {
 	const argv = parse();
+	
+	const cacheDir: string = path.join(os.tmpdir(), 'kogs-nwjs-cache');
+	if (argv.options.asBoolean('clearCache')) {
+		log.info('Clearing build cache ({--clear-cache})...');
+		fs.rmdirSync(cacheDir, { recursive: true });
+		log.success('Cleared build cache {%s}', cacheDir);
+	}
+
 	const downloadServer = argv.options.asString('downloadServer') ?? 'https://dl.nwjs.io';
 
 	let didAutoDetectVersion: boolean = false;
@@ -98,8 +106,6 @@ try {
 	const fileName: string = versionName + extension;
 
 	const downloadURL: string = path.posix.join(downloadServer, versionTag, fileName);
-
-	const cacheDir: string = path.join(os.tmpdir(), 'kogs-nwjs-cache');
 	const cachePath: string = path.join(cacheDir, fileName);
 
 	// Ensure cache directory exists.

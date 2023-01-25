@@ -737,3 +737,21 @@ test('cmd: nwjs --version 0.49.2 --exclude "^credits.html$"', () => {
 	// Check the credits.html file was excluded.
 	expect(fs.existsSync(path.join(TEST_DIR, 'credits.html'))).toBe(false);
 });
+
+// This test should ideally be left until last.
+test('cmd: nwjs --version 0.49.2 --clear-cache', () => {
+	// Ensure cache directory exists.
+	if (!fs.existsSync(CACHCE_DIR))
+		fs.mkdirSync(CACHCE_DIR);
+
+	// Create a random ZIP file just to ensure the cache has something in it.
+	fs.writeFileSync(path.join(CACHCE_DIR, 'cacheJunk.zip'), 'junk');
+
+	// Run the command.
+	execSync(`nwjs --version 0.49.2 --clear-cache`, EXEC_OPTS);
+
+	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	expect(cacheFiles.length).toBe(1);
+	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
+	expect(cacheFiles.find(e => e.match(/cacheJunk\.zip/))).toBeUndefined();
+});

@@ -24,6 +24,7 @@ Options:
   --version             Specify a version to install (e.g 0.49.2)
   --sdk                 Install the SDK flavor instead of the normal flavor.
   --no-cache            Disable caching of downloaded builds.
+  --clear-cache         Clears the cache of downloaded builds.
   --platform <string>   Override the platform to install for.
   --arch <string>       Override the architecture to install for.
   --exclude <pattern>   Exclude files matching the given pattern.
@@ -97,6 +98,12 @@ To disable this behavior, use the `--no-cache` option. The cache will not be che
 
 ```bash
 nwjs --no-cache # Disables caching.
+```
+
+Additionally, the `--clear-cache` option can be used to clear the cache before a build starts. The cache will still be used unless `--no-cache` is also set.
+
+```bash
+nwjs --clear-cache # Clears the cache before installing.
 ```
 
 ### Development Build (SDK)
