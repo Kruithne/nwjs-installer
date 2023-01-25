@@ -209,12 +209,6 @@ try {
 	} else {
 		throw new Error('Archive format {' + archiveType + '} not implemented');
 	}
-
-	// nwjs-v072.0-win-x64/locales/zh-TW.pak.info
-	// TODO: Handle --exclude parameter to drop certain files.
-	// TODO: Handle --locale to drop certain locale files (comma-separate)?
-	// TODO: Handle --no-pak-info option to drop .pak.info files (link bug report).
-	// TODO: Clear cache.
 } catch (err) {
 	log.error('{Failed} %s: ' + err.message, err.name);
 	process.exit(1);
