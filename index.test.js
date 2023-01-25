@@ -7,13 +7,13 @@ import http from 'node:http';
 import url from 'node:url';
 
 const TEST_DIR = './tmp';
-const CACHCE_DIR = path.join(os.tmpdir(), 'kogs-nwjs-cache');
+const CACHE_DIR = path.join(os.tmpdir(), 'kogs-nwjs-cache');
 const EXEC_OPTS = { cwd: TEST_DIR };
 
 beforeAll(() => {
 	// Wipe cache directory in case it exists from a previous test run or development.
-	if (fs.existsSync(CACHCE_DIR))
-		fs.rmdirSync(CACHCE_DIR, { recursive: true });
+	if (fs.existsSync(CACHE_DIR))
+		fs.rmdirSync(CACHE_DIR, { recursive: true });
 });
 
 beforeEach(() => {
@@ -48,7 +48,7 @@ test('cmd: nwjs', () => {
 	else if (process.platform === 'darwin')
 		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
 
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.length).toBe(1);
 	expect(cacheFiles[0]).toMatch(/nwjs-v\d+\.\d+\.\d+-\w+-\w+\.(zip|tar\.gz)/);
 });
@@ -466,21 +466,21 @@ test('cmd: nwjs --version 0.49.2', () => {
 	}
 
 	// Cache should contain the exact version specified.
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 });
 
 test('cmd: nwjs --version 0.49.2 (cache check)', () => {
 	// Get the mtime of the cache file.
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	const cacheFile = cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/));
-	const cacheFileMtime = fs.statSync(path.join(CACHCE_DIR, cacheFile)).mtimeMs;
+	const cacheFileMtime = fs.statSync(path.join(CACHE_DIR, cacheFile)).mtimeMs;
 
 	// Run the command.
 	execSync(`nwjs --version 0.49.2`, EXEC_OPTS);
 
 	// Cache file should not have been modified.
-	expect(fs.statSync(path.join(CACHCE_DIR, cacheFile)).mtimeMs).toBe(cacheFileMtime);
+	expect(fs.statSync(path.join(CACHE_DIR, cacheFile)).mtimeMs).toBe(cacheFileMtime);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -493,15 +493,15 @@ test('cmd: nwjs --version 0.49.2 (cache check)', () => {
 
 test('cmd: nwjs --version 0.49.2 --no-cache', () => {
 	// Purposely poison the cache so that we can test that it's not used.
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	const cacheFile = cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/));
-	fs.writeFileSync(path.join(CACHCE_DIR, cacheFile), 'poisoned');
+	fs.writeFileSync(path.join(CACHE_DIR, cacheFile), 'poisoned');
 
 	// Run the command.
 	execSync(`nwjs --version 0.49.2 --no-cache`, EXEC_OPTS);
 
 	// Cache file should be untouched.
-	expect(fs.readFileSync(path.join(CACHCE_DIR, cacheFile), 'utf8')).toBe('poisoned');
+	expect(fs.readFileSync(path.join(CACHE_DIR, cacheFile), 'utf8')).toBe('poisoned');
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -512,7 +512,7 @@ test('cmd: nwjs --version 0.49.2 --no-cache', () => {
 		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
 
 	// Delete the poisoned cache file.
-	fs.unlinkSync(path.join(CACHCE_DIR, cacheFile));
+	fs.unlinkSync(path.join(CACHE_DIR, cacheFile));
 });
 
 test('cmd: nwjs --version 0.49.2 --downloadServer=localhost', async () => {
@@ -539,8 +539,8 @@ test('cmd: nwjs --version 0.49.2 --downloadServer=localhost', async () => {
 	const port = server.address().port;
 
 	// Make sure the cache is empty.
-	if (fs.existsSync(CACHCE_DIR))
-		fs.rmdirSync(CACHCE_DIR, { recursive: true });
+	if (fs.existsSync(CACHE_DIR))
+		fs.rmdirSync(CACHE_DIR, { recursive: true });
 
 	// Run the command.
 	execSync(`nwjs --version 0.49.2 --downloadServer=http://localhost:${port}`, EXEC_OPTS);
@@ -557,7 +557,7 @@ test('cmd: nwjs --version 0.49.2 --downloadServer=localhost', async () => {
 		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
 
 	// Cache should contain the exact version specified.
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 });
 
@@ -578,7 +578,7 @@ test('cmd: nwjs --version 0.49.2 --sdk', () => {
 	}
 
 	// Cache should contain the exact SDK version specified.
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.find(e => e.match(/nwjs-sdk-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 });
 
@@ -595,7 +595,7 @@ test('cmd: nwjs --version 0.48.0-beta1 (pre-release)', () => {
 		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
 
 	// Cache should contain the exact version specified.
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.48\.0-beta1-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 });
 
@@ -607,7 +607,7 @@ test('cmd: nwjs --version 0.49.2 --platform win --arch x64', () => {
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
 
 	// Cache should contain the exact platform and arch specified.
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-win-x64\.zip/))).not.toBeUndefined();
 });
 
@@ -619,7 +619,7 @@ test('cmd: nwjs --version 0.49.2 --platform win --arch ia32', () => {
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
 
 	// Cache should contain the exact platform and arch specified.
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-win-ia32\.zip/))).not.toBeUndefined();
 });
 
@@ -631,7 +631,7 @@ test('cmd: nwjs --version 0.49.2 --platform linux --arch x64', () => {
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
 
 	// Cache should contain the exact platform and arch specified.
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-linux-x64\.tar\.gz/))).not.toBeUndefined();
 });
 
@@ -643,7 +643,7 @@ test('cmd: nwjs --version 0.49.2 --platform linux --arch ia32', () => {
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
 
 	// Cache should contain the exact platform and arch specified.
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-linux-ia32\.tar\.gz/))).not.toBeUndefined();
 });
 
@@ -655,7 +655,7 @@ test('cmd: nwjs --version 0.49.2 --platform osx --arch x64', () => {
 	expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
 
 	// Cache should contain the exact platform and arch specified.
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-osx-x64\.zip/))).not.toBeUndefined();
 });
 
@@ -741,16 +741,16 @@ test('cmd: nwjs --version 0.49.2 --exclude "^credits.html$"', () => {
 // This test should ideally be left until last.
 test('cmd: nwjs --version 0.49.2 --clear-cache', () => {
 	// Ensure cache directory exists.
-	if (!fs.existsSync(CACHCE_DIR))
-		fs.mkdirSync(CACHCE_DIR);
+	if (!fs.existsSync(CACHE_DIR))
+		fs.mkdirSync(CACHE_DIR);
 
 	// Create a random ZIP file just to ensure the cache has something in it.
-	fs.writeFileSync(path.join(CACHCE_DIR, 'cacheJunk.zip'), 'junk');
+	fs.writeFileSync(path.join(CACHE_DIR, 'cacheJunk.zip'), 'junk');
 
 	// Run the command.
 	execSync(`nwjs --version 0.49.2 --clear-cache`, EXEC_OPTS);
 
-	const cacheFiles = fs.readdirSync(CACHCE_DIR);
+	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.length).toBe(1);
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 	expect(cacheFiles.find(e => e.match(/cacheJunk\.zip/))).toBeUndefined();
