@@ -728,11 +728,11 @@ test('cmd: nwjs --version 0.49.2 --exclude "^credits.html$"', () => {
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
-		expect(fs.existsSync(path.join(tempDir, 'nw'))).toBe(true);
+		expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
 	else if (process.platform === 'win32')
-		expect(fs.existsSync(path.join(tempDir, 'nw.exe'))).toBe(true);
+		expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
 	else if (process.platform === 'darwin')
-		expect(fs.existsSync(path.join(tempDir, 'nwjs.app'))).toBe(true);
+		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
 
 	// Check the credits.html file was excluded.
 	expect(fs.existsSync(path.join(TEST_DIR, 'credits.html'))).toBe(false);
