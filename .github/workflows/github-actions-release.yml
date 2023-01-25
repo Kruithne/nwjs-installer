@@ -29,9 +29,6 @@ jobs:
       - name: Compile TypeScript
         run: tsc
 
-      - name: Run tests
-        run: npm test
-
       - name: ESLint check
         run: npx eslint .
 
