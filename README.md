@@ -26,6 +26,7 @@ Options:
   --no-cache            Disable caching of downloaded builds.
   --platform <string>   Override the platform to install for.
   --arch <string>       Override the architecture to install for.
+  --exclude <pattern>   Exclude files matching the given pattern.
   --download-server     Override the default download server to use.
   --locale <a,b,c..>    Define which locales to include in the build (defaults: all).
   --remove-pak-info     Remove .pak.info files to reduce the size of the build.
@@ -38,6 +39,7 @@ Options:
 - [Platform / Architecture](#platform--architecture) - Override the platform and architecture to install for.
 - [Caching](#caching) - Cache downloaded builds to avoid unnecessary downloads.
 - [Development Build (SDK)](#development-build-sdk) - Install the SDK flavor instead of the normal flavor.
+- [Excluding Files](#excluding-files) - Exclude files from the build.
 - [Download Server](#download-server) - Override the default download server to use.
 - [Locales](#locale) - Automatically remove locale files that you won't use.
 - [Remove .pak.info](#remove-pakinfo) - Remove .pak.info files to reduce the size of the build.
@@ -104,6 +106,20 @@ By default, the normal flavor of nw.js will be installed. If you wish to install
 ```bash
 nwjs --sdk # Installs latest stable SDK build.
 ```
+
+### Excluding Files
+
+Providing the `--exclude <pattern>` option allows you to exclude files that match the pattern from the build. The pattern should be a valid [regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions).
+
+```bash
+nwjs --exclude "^credits.html$" # Excludes credits.html from the build.
+nwjs --exclude "\.pak\.info$" # Excludes all .pak.info files from the build.
+```
+
+Notes on file exclusion:
+- The pattern is matched against the file path as it appears inside the ZIP/TAR archive (minus the root directory), not the final file path on disk.
+- To exclude `.pak.info` files more efficiently, see the [Remove .pak.info](#remove-pakinfo) section.
+- To exclude locale files more efficiently, see the [Locales](#locale) section.
 
 ### Download Server
 

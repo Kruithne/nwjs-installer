@@ -72,6 +72,7 @@ try {
 	const targetDir: string = argv.options.asString('targetDir') ?? process.cwd();
 	const locale: string[] = argv.options.asArray('locale') ?? [];
 	const removePakInfo: boolean = argv.options.asBoolean('removePakInfo') ?? false;
+	const excludePattern: string | undefined = argv.options.asString('exclude') ?? undefined;
 
 	const archiveType: string = platform === 'linux' ? 'tar' : 'zip'; // TODO: Allow custom archive type to be provided.
 	const extension: string = archiveType === 'tar' ? '.tar.gz' : '.zip'; // TODO: Allow custom extension to be provided.
@@ -82,6 +83,9 @@ try {
 	log.info('Target Arch: {%s}' + (didAutoDetectArch ? ' (auto-detected)' : ''), arch);
 	log.info('Locale: ' + (locale.length > 0 ? formatArray(locale) : '{all}') + (removePakInfo ? ' (no pak info)' : ''));
 	log.info('Using SDK: {%s}', isSDK ? 'yes' : 'no');
+	if (excludePattern !== undefined)
+		log.info('Excluding: {%s}', excludePattern);
+
 	log.blank();
 
 	if (!useCache)
@@ -150,13 +154,12 @@ try {
 		return match ? localeStrings.includes(match[1].toLowerCase()) : true;
 	};
 
+	const excludeRegExp = excludePattern ? new RegExp(excludePattern, 'i') : undefined;
 	if (archiveType === 'tar') {
 		const extract = tar.list({
 			onentry: (entry: tar.Header) => {
 				if (entry.type !== 'File')
 					return;
-
-				// TODO: Implement filter.
 
 				// Drop the root directory from the path.
 				const entryPath = entry.path.split('/').splice(1).join('/');
@@ -166,6 +169,11 @@ try {
 
 				if (!localeFilter(entryPath)) {
 					log.info('Skipping {%s} (does not match --locale)', filePath);
+					return;
+				}
+
+				if (excludeRegExp && excludeRegExp.test(entryPath)) {
+					log.info('Skipping {%s} (matches --exclude)', filePath);
 					return;
 				}
 
@@ -187,13 +195,16 @@ try {
 		const promises = [];
 
 		zip.folder(versionName).forEach((entryPath, entry) => {
-			// TODO: Implement filter.
-
 			const filePath = path.join(targetDir, entryPath);
 			const fileDir = path.dirname(filePath);
 
 			if (!localeFilter(entryPath)) {
 				log.info('Skipping {%s} (does not match --locale)', filePath);
+				return;
+			}
+
+			if (excludeRegExp && excludeRegExp.test(entryPath)) {
+				log.info('Skipping {%s} (matches --exclude)', filePath);
 				return;
 			}
 

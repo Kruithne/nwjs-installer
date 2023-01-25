@@ -718,3 +718,22 @@ test('cmd: nwjs --version 0.49.2 --remove-pak-info', () => {
 		expect(localeFiles.find(e => e.match(/\.pak\.info$/))).toBeUndefined();
 	}
 });
+
+test('cmd: nwjs --version 0.49.2 --exclude "^credits.html$"', () => {
+	// Use credits.html for testing since it's the only file that exists in the same
+	// directory on all platforms.
+
+	// Run the command.
+	execSync(`nwjs --version 0.49.2 --exclude "^credits.html$"`, EXEC_OPTS);
+
+	// Check nw.js was installed.
+	if (process.platform === 'linux')
+		expect(fs.existsSync(path.join(tempDir, 'nw'))).toBe(true);
+	else if (process.platform === 'win32')
+		expect(fs.existsSync(path.join(tempDir, 'nw.exe'))).toBe(true);
+	else if (process.platform === 'darwin')
+		expect(fs.existsSync(path.join(tempDir, 'nwjs.app'))).toBe(true);
+
+	// Check the credits.html file was excluded.
+	expect(fs.existsSync(path.join(TEST_DIR, 'credits.html'))).toBe(false);
+});
