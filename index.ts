@@ -11,15 +11,15 @@ import fs from 'node:fs';
 try {
 	const argv = parse();
 
-	log.info('kogs-nwjs/{%s}', info.version);
+	argv.version({ name: 'kogs-nwjs', version: info.version, alwaysPrint: true });
 	log.blank();
 
-	if (argv.options.asBoolean('help')) {
-		log.info('Usage: > nwjs [{options}]');
-		log.blank().info('Options:');
-
-		const help = [
-			{ name: '--help', description: 'Show this help message.' },
+	argv.help({
+		usage: 'Usage: $ nwjs [{options}]',
+		url: info.homepage,
+		entries: [
+			{ name: '--help', description: 'Show this help message and exit.' },
+			{ name: '--version', description: 'Show the version and exit.' },
 			{ name: '--target-dir', description: 'Specify a target directory to install to.' },
 			{ name: '--version', description: 'Specify a version to install (e.g 0.49.2)' },
 			{ name: '--sdk', description: 'Install the SDK flavor instead of the normal flavor.' },
@@ -31,18 +31,8 @@ try {
 			{ name: '--download-server', description: 'Override the default download server to use.' },
 			{ name: '--locale <{a},{b},{c}..>', description: 'Define which locales to include in the build (defaults: all).' },
 			{ name: '--remove-pak-info', description: 'Remove .pak.info files to reduce the size of the build.' }
-		];
-
-		const longestName = help.reduce((longest, option) => Math.max(longest, option.name.length), 0);
-		for (const option of help) {
-			const space = ' '.repeat(3 + longestName - option.name.replace(/[{}]/g, '').length);
-			log.info('  ' + option.name + space + option.description);
-		}
-
-		log.blank().info('For more information, see {%s}', info.homepage);
-		log.blank();
-		process.exit(0);
-	}
+		]
+	});
 
 	const cacheDir: string = path.join(os.tmpdir(), 'kogs-nwjs-cache');
 	if (argv.options.asBoolean('clearCache')) {

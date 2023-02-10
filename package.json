@@ -1,6 +1,6 @@
 {
 	"name": "@kogs/nwjs",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"type": "module",
 	"description": "Command line utility for building nw.js apps",
 	"main": "index.js",
@@ -8,7 +8,7 @@
 		"test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
 		"nwjs": "node --no-warnings index.js"
 	},
-	"bin":  {
+	"bin": {
 		"nwjs": "./index.js"
 	},
 	"repository": {
@@ -27,7 +27,7 @@
 	},
 	"homepage": "https://github.com/Kruithne/kogs-nwjs/#readme",
 	"dependencies": {
-		"@kogs/argv": "^1.0.0",
+		"@kogs/argv": "^1.2.0",
 		"@kogs/logger": "^3.3.7",
 		"jszip": "^3.10.1",
 		"tar": "^6.1.13"
