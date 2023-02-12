@@ -1,13 +1,15 @@
 name: publish
 
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Updated registry version'
+        required: true
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
 
     steps:
       - name: Checkout repository source
@@ -18,7 +20,6 @@ jobs:
         with:
           node-version: '19.x'
           registry-url: 'https://registry.npmjs.org'
-          scope: '@kruithne'
 
       - name: Install dependencies
         run: npm ci
@@ -32,10 +33,13 @@ jobs:
       - name: ESLint check
         run: npx eslint .
 
-      - name: Authenticate with GitHub Package Registry
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
+      - name: Update package version
+        run: npm version ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }} ✨"
 
-      - name: Publish to GitHub Packages
-        run: npm publish --registry=https://npm.pkg.github.com --userconfig=~/.npmrc
+      - name: Push changes
+        run: git push --follow-tags
+
+      - name: Publish to npm.js
+        run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
