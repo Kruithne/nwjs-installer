@@ -11,7 +11,7 @@ import fs from 'node:fs';
 try {
 	const argv = parse();
 
-	argv.version({ name: 'kogs-nwjs', version: info.version, alwaysPrint: true });
+	argv.version({ name: 'nwjs-installer', version: info.version, alwaysPrint: true });
 	log.blank();
 
 	argv.help({
@@ -34,7 +34,7 @@ try {
 		]
 	});
 
-	const cacheDir: string = path.join(os.tmpdir(), 'kogs-nwjs-cache');
+	const cacheDir: string = path.join(os.tmpdir(), 'nwjs-installer-cache');
 	if (argv.options.asBoolean('clearCache')) {
 		log.info('Clearing build cache ({--clear-cache})...');
 		fs.rmdirSync(cacheDir, { recursive: true });

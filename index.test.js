@@ -7,7 +7,7 @@ import http from 'node:http';
 import url from 'node:url';
 
 const TEST_DIR = './tmp';
-const CACHE_DIR = path.join(os.tmpdir(), 'kogs-nwjs-cache');
+const CACHE_DIR = path.join(os.tmpdir(), 'nwjs-installer-cache');
 const EXEC_OPTS = { cwd: TEST_DIR };
 
 beforeAll(() => {

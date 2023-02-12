@@ -1,7 +1,7 @@
 <p align="center"><img src="docs/nwjs-installer-logo.png"/></p>
 
 # nwjs-installer
-![tests status](https://github.com/Kruithne/kogs-nwjs/actions/workflows/github-actions-test.yml/badge.svg) ![typescript](https://img.shields.io/badge/language-typescript-blue) [![license badge](https://img.shields.io/github/license/Kruithne/kogs-nwjs?color=blue)](LICENSE) ![npm version](https://img.shields.io/npm/v/nwjs-installer?color=blue)
+![tests status](https://github.com/Kruithne/nwjs-installer/actions/workflows/github-actions-test.yml/badge.svg) ![typescript](https://img.shields.io/badge/language-typescript-blue) [![license badge](https://img.shields.io/github/license/Kruithne/nwjs-installer?color=blue)](LICENSE) ![npm version](https://img.shields.io/npm/v/nwjs-installer?color=blue)
 
 `nwjs-installer` is a command-line utility written in [Node.js](https://nodejs.org/) that streamlines the process of preparing a [nw.js](https://nwjs.io/) distribution.
 
@@ -95,7 +95,7 @@ This utility does not validate against this table, and will attempt to download 
 By default, downloaded builds are cached to the operating system's temporary directory. Installing the same version multiple times will re-use the cached build, avoiding unnecessary downloads.
 
 ```js
-Path: os.tmpdir() + '/kogs-nwjs-cache/' + package
+Path: os.tmpdir() + '/nwjs-installer-cache/' + package
 ```
 
 To disable this behavior, use the `--no-cache` option. The cache will not be checked or updated when this option is used.
@@ -176,7 +176,7 @@ nwjs --remove-pak-info # Removes .pak.info files.
 The `--remove-pak-info` is a more convinient and readable way of doing `--exclude "^locales\/([^.]+)\.pak\.info|$"` (see [Excluding Files](#excluding-files)) and skips OSX builds as they do not include these files.
 
 ## Contributing / Feedback / Issues
-Feedback, bug reports and contributions are welcome. Please use the [GitHub issue tracker](https://github.com/Kruithne/kogs-nwjs/issues) and follow the guidelines found in the [CONTRIBUTING](CONTRIBUTING.md) file.
+Feedback, bug reports and contributions are welcome. Please use the [GitHub issue tracker](https://github.com/Kruithne/nwjs-installer/issues) and follow the guidelines found in the [CONTRIBUTING](CONTRIBUTING.md) file.
 
 ## License
 The code in this repository is licensed under the ISC license. See the [LICENSE](LICENSE) file for more information.

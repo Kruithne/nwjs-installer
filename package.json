@@ -13,7 +13,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Kruithne/kogs-nwjs.git"
+		"url": "git+https://github.com/Kruithne/nwjs-installer.git"
 	},
 	"keywords": [
 		"nwjs",
@@ -23,9 +23,9 @@
 	"author": "Kruithne (kruithne@gmail.com)",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/Kruithne/kogs-nwjs/issues"
+		"url": "https://github.com/Kruithne/nwjs-installer/issues"
 	},
-	"homepage": "https://github.com/Kruithne/kogs-nwjs/#readme",
+	"homepage": "https://github.com/Kruithne/nwjs-installer/#readme",
 	"dependencies": {
 		"@kogs/argv": "^1.2.0",
 		"@kogs/logger": "^3.3.7",
