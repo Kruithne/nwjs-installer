@@ -55,21 +55,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            README.md
-            LICENSE
-            package.json
-            index.js
-            index.d.ts
-          tag_name: ${{ github.event.inputs.version }}
-          name: ${{ github.event.inputs.version }}
-          body: |
-            Release ${{ github.event.inputs.version }} ✨
-
       - name: Publish to npm.js
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            *.tgz
+          tag_name: ${{ github.event.inputs.version }}
+          name: ${{ github.event.inputs.version }}
+          body: |
+            Release ${{ github.event.inputs.version }} ✨
+        run:
+          npm pack
