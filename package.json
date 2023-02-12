@@ -1,6 +1,6 @@
 {
 	"name": "nwjs-installer",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"type": "module",
 	"description": "Command line utility for building nw.js apps",
 	"main": "index.js",
