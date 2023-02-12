@@ -60,6 +60,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Create release tarball
+        run: npm pack
+
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
@@ -69,5 +72,3 @@ jobs:
           name: ${{ github.event.inputs.version }}
           body: |
             Release ${{ github.event.inputs.version }} ✨
-        run:
-          npm pack
