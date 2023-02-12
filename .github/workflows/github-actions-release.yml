@@ -10,8 +10,14 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Validate version format
+        run: |
+          if [[ ! ${{ github.event.inputs.version }} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Version '${{ github.event.inputs.version }}' is not a valid semver version."
+            exit 1
+          fi
+
       - name: Checkout repository source
         uses: actions/checkout@v3
 
