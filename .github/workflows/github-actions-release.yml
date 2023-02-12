@@ -31,7 +31,7 @@ jobs:
         run: npx eslint .
 
       - name: Authenticate with GitHub Package Registry
-        run: echo "//npm.pkg.github.com:authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+        run: echo "//npm.pkg.github.com:authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
 
       - name: Publish to GitHub Packages
         run: npm publish --registry=https://npm.pkg.github.com
