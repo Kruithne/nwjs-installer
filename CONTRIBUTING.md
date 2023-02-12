@@ -1,4 +1,4 @@
-# Contributing to `@kogs`
+# Contributing to `nwjs-installer`
 
 All contributions are welcome, whether it be a bug report, feature request or a pull request. Please ensure you follow the guidelines below.
 

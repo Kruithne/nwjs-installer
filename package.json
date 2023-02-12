@@ -1,5 +1,5 @@
 {
-	"name": "@kogs/nwjs",
+	"name": "nwjs-installer",
 	"version": "1.0.1",
 	"type": "module",
 	"description": "Command line utility for building nw.js apps",

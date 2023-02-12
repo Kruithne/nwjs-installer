@@ -1,7 +1,9 @@
-# @kogs/nwjs
-![tests status](https://github.com/Kruithne/kogs-nwjs/actions/workflows/github-actions-test.yml/badge.svg) [![license badge](https://img.shields.io/github/license/Kruithne/kogs-nwjs?color=blue)](LICENSE)
+<p align="center"><img src="docs/nwjs-installer-logo.png"/></p>
 
-`@kogs/nwjs` is a command-line utility written in [Node.js](https://nodejs.org/) that streamlines the process of preparing a [nw.js](https://nwjs.io/) distribution.
+# nwjs-installer
+![tests status](https://github.com/Kruithne/kogs-nwjs/actions/workflows/github-actions-test.yml/badge.svg) ![typescript](https://img.shields.io/badge/language-typescript-blue) [![license badge](https://img.shields.io/github/license/Kruithne/kogs-nwjs?color=blue)](LICENSE) ![npm version](https://img.shields.io/npm/v/nwjs-installer?color=blue)
+
+`nwjs-installer` is a command-line utility written in [Node.js](https://nodejs.org/) that streamlines the process of preparing a [nw.js](https://nwjs.io/) distribution.
 
 This utility is intended for use in automated build pipelines or for development and testing purposes.
 
@@ -12,7 +14,7 @@ This utility is intended for use in automated build pipelines or for development
 
 ## Installation
 ```bash
-npm install @kogs/nwjs -g
+npm install nwjs-installer -g
 ```
 
 ## Usage
@@ -147,7 +149,7 @@ Notes on custom download servers:
 
 By default, builds come with locale files for [all languages supported by Chromium](https://chromium.googlesource.com/chromium/src/build/config/+/refs/heads/main/locales.gni). According to the [developer of nw.js](https://github.com/nwjs/nw.js/issues/2244#issuecomment-379977958), it is safe to remove locale files that you won't be using.
 
-`@kogs/nwjs` makes this simple with the `--locale <locales>` option, where `<locales>` is a comma-separated list of locales to include.
+`nwjs-installer` makes this simple with the `--locale <locales>` option, where `<locales>` is a comma-separated list of locales to include.
 
 You can find a list of locales supported by Chromium [here](https://chromium.googlesource.com/chromium/src/build/config/+/refs/heads/main/locales.gni).
 
@@ -156,33 +158,22 @@ nwjs --locale "sw,en-GB,en_US"
 ```
 
 Notes on locale:
-- You should use the locale IDs that Chromium uses, not platform-specific variations. For example, don't use `en` (OSX variation) for `en-US`, `@kogs/nwjs` will automatically adjust this when building for OSX.
+- You should use the locale IDs that Chromium uses, not platform-specific variations. For example, don't use `en` (OSX variation) for `en-US`, `nwjs-installer` will automatically adjust this when building for OSX.
 - The locale files **are** not related to the language content of your application, it is related to the environment in which the application will be deployed. **Do not** exclude locale files unless you are 100% sure of the locale of the computers your application will be deployed onto.
-- The use of hyphens and underscores differs between platforms, as such you can use either and `@kogs/nwjs` will automatically adjust them depending on the target platform (e.g `en-gb` == `en_gb`).
+- The use of hyphens and underscores differs between platforms, as such you can use either and `nwjs-installer` will automatically adjust them depending on the target platform (e.g `en-gb` == `en_gb`).
 - Locale flags are case-insensitive (e.g `en-GB` == `en-gb`).
 
 ### Remove .pak.info
 
 During the Chromium build process for Windows and Linux builds, a `.pak.info` file is generated for each `.pak` file in `/locales`. [Since 2018, CEF has been removing these files](https://bitbucket.org/chromiumembedded/cef/issues/2375) as part of their build script, but nw.js still includes them.
 
-These files are not needed and can be safely removed. To help with this, `@kogs/nwjs` will automatically remove these if the `--remove-pak-info` option is used.
+These files are not needed and can be safely removed. To help with this, `nwjs-installer` will automatically remove these if the `--remove-pak-info` option is used.
 
 ```bash
 nwjs --remove-pak-info # Removes .pak.info files.
 ```
 
 The `--remove-pak-info` is a more convinient and readable way of doing `--exclude "^locales\/([^.]+)\.pak\.info|$"` (see [Excluding Files](#excluding-files)) and skips OSX builds as they do not include these files.
-
-## What is `@kogs`?
-`@kogs` is a collection of packages that I've written to consolidate the code I often reuse across my projects with the following goals in mind:
-
-- Consistent API.
-- Minimal dependencies.
-- Full TypeScript definitions.
-- Avoid feature creep.
-- ES6+ syntax.
-
-All of the packages in the `@kogs` collection can be found [on npm under the `@kogs` scope.](https://www.npmjs.com/settings/kogs/packages)
 
 ## Contributing / Feedback / Issues
 Feedback, bug reports and contributions are welcome. Please use the [GitHub issue tracker](https://github.com/Kruithne/kogs-nwjs/issues) and follow the guidelines found in the [CONTRIBUTING](CONTRIBUTING.md) file.
