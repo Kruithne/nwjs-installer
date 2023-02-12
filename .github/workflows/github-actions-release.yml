@@ -27,6 +27,11 @@ jobs:
           node-version: '19.x'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Configure git
+        run: |
+          git config --global user.name "Kruithne"
+          git config --global user.email "kruithne@gmail.com"
+
       - name: Install dependencies
         run: npm ci
         
