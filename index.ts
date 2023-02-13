@@ -11,7 +11,7 @@ import fs from 'node:fs';
 try {
 	const argv = parse();
 
-	argv.version({ name: 'nwjs-installer', version: info.version, alwaysPrint: true });
+	log.info('nwjs-installer {%s}', info.version);
 	log.blank();
 
 	argv.help({
@@ -19,7 +19,6 @@ try {
 		url: info.homepage,
 		entries: [
 			{ name: '--help', description: 'Show this help message and exit.' },
-			{ name: '--version', description: 'Show the version and exit.' },
 			{ name: '--target-dir', description: 'Specify a target directory to install to.' },
 			{ name: '--version', description: 'Specify a version to install (e.g 0.49.2)' },
 			{ name: '--sdk', description: 'Install the SDK flavor instead of the normal flavor.' },
