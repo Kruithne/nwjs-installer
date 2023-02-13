@@ -1,4 +1,5 @@
 name: publish
+run-name: "Publish ${{ github.event.inputs.version }} 🤖"
 
 on:
   workflow_dispatch:
@@ -20,8 +21,6 @@ jobs:
             echo "Version '${{ github.event.inputs.version }}' is not a valid semver version."
             exit 1
           fi
-
-      - run-name: "Publish ${{ github.event.inputs.version }} 🤖"
 
       - name: Checkout repository source
         uses: actions/checkout@v3
