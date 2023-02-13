@@ -21,6 +21,8 @@ jobs:
             exit 1
           fi
 
+      - run-name: "Publish ${{ github.event.inputs.version }} 🤖"
+
       - name: Checkout repository source
         uses: actions/checkout@v3
 
