@@ -2,7 +2,7 @@
 	"name": "nwjs-installer",
 	"version": "1.0.7",
 	"type": "module",
-	"description": "Command line utility for building nw.js apps",
+	"description": "Cross-platform CLI tool for building nw.js applications",
 	"main": "index.js",
 	"scripts": {
 		"test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
@@ -17,7 +17,13 @@
 	},
 	"keywords": [
 		"nwjs",
-		"node-webkit",
+		"webkit",
+		"installer",
+		"linux",
+		"osx",
+		"windows",
+		"chromium",
+		"cli",
 		"build"
 	],
 	"author": "Kruithne (kruithne@gmail.com)",
