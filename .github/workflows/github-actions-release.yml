@@ -61,13 +61,13 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create release tarball
-        run: npm pack
+        run: npm pack --output=release-${{ github.event.inputs.version }}.tgz
 
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            *.tgz
+            release-${{ github.event.inputs.version }}.tgz
           tag_name: ${{ github.event.inputs.version }}
           name: ${{ github.event.inputs.version }}
           body: |
