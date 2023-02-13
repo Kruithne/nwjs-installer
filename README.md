@@ -1,7 +1,6 @@
 <p align="center"><img src="docs/nwjs-installer-logo.png"/></p>
 
-# nwjs-installer
-![tests status](https://github.com/Kruithne/nwjs-installer/actions/workflows/github-actions-test.yml/badge.svg) ![typescript](https://img.shields.io/badge/language-typescript-blue) [![license badge](https://img.shields.io/github/license/Kruithne/nwjs-installer?color=blue)](LICENSE) ![npm version](https://img.shields.io/npm/v/nwjs-installer?color=blue)
+# nwjs-installer &middot; ![tests status](https://github.com/Kruithne/nwjs-installer/actions/workflows/github-actions-test.yml/badge.svg) ![typescript](https://img.shields.io/badge/language-typescript-blue) [![license badge](https://img.shields.io/github/license/Kruithne/nwjs-installer?color=blue)](LICENSE) ![npm version](https://img.shields.io/npm/v/nwjs-installer?color=blue)
 
 `nwjs-installer` is a command-line utility written in [Node.js](https://nodejs.org/) that streamlines the process of preparing a [nw.js](https://nwjs.io/) distribution.
 
