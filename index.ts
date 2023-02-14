@@ -98,15 +98,25 @@ try {
 		arch = process.arch;
 	}
 
+	let targetDir: string = argv.options.asString('targetDir') ?? process.cwd();
 	const useCache: boolean = !argv.options.asBoolean('noCache');
 	const isSDK: boolean = argv.options.asBoolean('sdk') ?? false;
-	const targetDir: string = argv.options.asString('targetDir') ?? process.cwd();
 	const locale: string[] = argv.options.asArray('locale') ?? [];
 	const removePakInfo: boolean = argv.options.asBoolean('removePakInfo') ?? false;
 	const excludePattern: string | undefined = argv.options.asString('exclude') ?? undefined;
 
 	const archiveType: string = platform === 'linux' ? 'tar' : 'zip'; // TODO: Allow custom archive type to be provided.
 	const extension: string = archiveType === 'tar' ? '.tar.gz' : '.zip'; // TODO: Allow custom extension to be provided.
+
+	const tokens = {
+		'{version}': targetVersion,
+		'{platform}': platform,
+		'{arch}': arch,
+		'{flavor}': isSDK ? 'sdk' : 'normal',
+		'{package}': `nwjs${isSDK ? '-sdk' : ''}-v${targetVersion}-${platform}-${arch}`,
+	};
+
+	targetDir = targetDir.replace(/\{([^}]+)\}/g, (match, token) => tokens[token.toLowerCase()]);
 
 	log.info('Installing nw.js in {%s}', targetDir);
 	log.info('Target Version: {%s}' + (didAutoDetectVersion ? ' (auto-detected)' : ''), targetVersion);

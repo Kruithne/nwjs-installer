@@ -69,6 +69,23 @@ nwjs --target-dir /path/to/target # Installs to /path/to/target.
 ```
 Keep in mind that files will be overwritten if they already exist in the target directory.
 
+The `--target-directory` option also supports some substitution variables that can be used to dynamically generate the target directory.
+
+
+| Variable | Description | Example |
+| -------- | ----------- | ------- |
+| `{version}` | The version of nw.js being installed. | `0.49.2` |
+| `{platform}` | The platform being installed for. | `win` |
+| `{arch}` | The architecture being installed for. | `x64` |
+| `{flavor}` | The flavor being installed. | `normal` |
+| `{package}` | The name of the package being installed. | `nwjs-v0.49.2-win-x64` |
+
+```bash
+nwjs --target-dir /{package} # Installs to /nwjs-v0.49.2-win-x64
+nwjs --sdk --target-dir /{version}/{flavor} # Installs to /0.49.2/sdk
+```
+
+
 ### Platform / Architecture
 
 By default, the platform and architecture of the current system will be used. If you wish to override this, use the `--platform` and `--arch` options.
