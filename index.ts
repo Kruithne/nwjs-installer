@@ -139,7 +139,8 @@ try {
 	const versionName: string = ['nwjs', isSDK ? 'sdk' : '', versionTag, platform, arch].filter(Boolean).join('-');
 	const fileName: string = versionName + extension;
 
-	const downloadURL: string = path.posix.join(downloadServer, versionTag, fileName);
+
+	const downloadURL = downloadServer + '/' + versionTag + '/' + fileName;
 	const cachePath: string = path.join(cacheDir, fileName);
 
 	// Ensure cache directory exists.
