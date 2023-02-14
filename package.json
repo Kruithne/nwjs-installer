@@ -1,6 +1,6 @@
 {
 	"name": "nwjs-installer",
-	"version": "1.0.9",
+	"version": "1.1.0",
 	"type": "module",
 	"description": "Cross-platform CLI tool for building nw.js applications",
 	"main": "index.js",
