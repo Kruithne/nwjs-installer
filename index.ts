@@ -116,7 +116,8 @@ try {
 		'{package}': `nwjs${isSDK ? '-sdk' : ''}-v${targetVersion}-${platform}-${arch}`,
 	};
 
-	targetDir = targetDir.replace(/\{([^}]+)\}/g, (match, token) => tokens[token.toLowerCase()]);
+	// Replace all tokens
+	targetDir = targetDir.replace(/{version}|{platform}|{arch}|{flavor}|{package}/g, (match) => tokens[match]);
 
 	log.info('Installing nw.js in {%s}', targetDir);
 	log.info('Target Version: {%s}' + (didAutoDetectVersion ? ' (auto-detected)' : ''), targetVersion);
