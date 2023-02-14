@@ -659,9 +659,9 @@ test('cmd: nwjs --version 0.49.2 --platform osx --arch x64', () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-osx-x64\.zip/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs --version 0.49.2 --target-dir test/<version>/<platform>/<arch>/<flavor>', () => {
+test('cmd: nwjs --version 0.49.2 --target-dir="test/<version>/<platform>/<arch>/<flavor>"', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --target-dir test/<version>/<platform>/<arch>/<flavor>`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2 --target-dir="test/<version>/<platform>/<arch>/<flavor>"`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -672,9 +672,9 @@ test('cmd: nwjs --version 0.49.2 --target-dir test/<version>/<platform>/<arch>/<
 		expect(fs.existsSync(path.join(TEST_DIR, 'test', '0.49.2', 'osx', 'x64', 'normal', 'nwjs.app'))).toBe(true);
 });
 
-test('cmd: nwjs --version 0.49.2 --target-dir test/<version>/<platform>/<arch>/<flavor> --sdk', () => {
+test('cmd: nwjs --version 0.49.2 --target-dir="test/<version>/<platform>/<arch>/<flavor>" --sdk', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --target-dir test/<version>/<platform>/<arch>/<flavor> --sdk`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2 --target-dir="test/<version>/<platform>/<arch>/<flavor>" --sdk`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -685,9 +685,9 @@ test('cmd: nwjs --version 0.49.2 --target-dir test/<version>/<platform>/<arch>/<
 		expect(fs.existsSync(path.join(TEST_DIR, 'test', '0.49.2', 'osx', 'x64', 'sdk', 'nwjs.app'))).toBe(true);
 });
 
-test('cmd: nwjs --version 0.49.2 --target-dir test/<package>', () => {
+test('cmd: nwjs --version 0.49.2 --target-dir="test/<package>"', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --target-dir test/<package>`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2 --target-dir="test/<package>"`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -698,9 +698,9 @@ test('cmd: nwjs --version 0.49.2 --target-dir test/<package>', () => {
 		expect(fs.existsSync(path.join(TEST_DIR, 'test', 'nwjs-v0.49.2-osx-x64', 'nwjs.app'))).toBe(true);
 });
 
-test('cmd: nwjs --version 0.49.2 --target-dir test/<package> --sdk', () => {
+test('cmd: nwjs --version 0.49.2 --target-dir="test/<package>" --sdk', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --target-dir test/<package> --sdk`, EXEC_OPTS);
+	execSync(`nwjs --version 0.49.2 --target-dir="test/<package>" --sdk`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
