@@ -582,9 +582,9 @@ test('cmd: nwjs-installer --version 0.49.2 --sdk', () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-sdk-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs-installer --version 0.48.0-beta1 (pre-release)', () => {
+test('cmd: nwjs-installer --version v0.48.0-beta1 (pre-release)', () => {
 	// Run the command.
-	execSync(`nwjs-installer --version 0.48.0-beta1`, EXEC_OPTS);
+	execSync(`nwjs-installer --version v0.48.0-beta1`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')

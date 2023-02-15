@@ -74,6 +74,10 @@ try {
 
 		targetVersion = latest.join('.');
 		didAutoDetectVersion = true;
+	} else {
+		// Remove leading 'v' from version string.
+		if (targetVersion.startsWith('v'))
+			targetVersion = targetVersion.slice(1);
 	}
 
 	let didAutoDetectPlatform: boolean = false;
