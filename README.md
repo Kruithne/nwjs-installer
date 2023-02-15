@@ -81,10 +81,9 @@ The `--target-directory` option also supports some substitution variables that c
 | `{package}` | The name of the package being installed. | `nwjs-v0.49.2-win-x64` |
 
 ```bash
-nwjs --target-dir="/{package}"" # Installs to /nwjs-v0.49.2-win-x64
-nwjs --sdk --target-dir="/{version}/{flavor}"" # Installs to /0.49.2/sdk
+nwjs --target-dir="/{package}" # Installs to /nwjs-v0.49.2-win-x64
+nwjs --sdk --target-dir="/{version}/{flavor}" # Installs to /0.49.2/sdk
 ```
-
 
 ### Platform / Architecture
 
