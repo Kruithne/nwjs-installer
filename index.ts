@@ -36,7 +36,7 @@ try {
 	const cacheDir: string = path.join(os.tmpdir(), 'nwjs-installer-cache');
 	if (argv.options.asBoolean('clearCache')) {
 		log.info('Clearing build cache ({--clear-cache})...');
-		fs.rmdirSync(cacheDir, { recursive: true });
+		fs.rmSync(cacheDir, { recursive: true, force: true });
 		log.success('Cleared build cache {%s}', cacheDir);
 	}
 

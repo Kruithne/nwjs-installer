@@ -12,22 +12,18 @@ const EXEC_OPTS = { cwd: TEST_DIR };
 
 beforeAll(() => {
 	// Wipe cache directory in case it exists from a previous test run or development.
-	if (fs.existsSync(CACHE_DIR))
-		fs.rmdirSync(CACHE_DIR, { recursive: true });
+	fs.rmSync(CACHE_DIR, { recursive: true, force: true });
 });
 
 beforeEach(() => {
 	// Wipe test directory in case it exists from a previous test run.
-	if (fs.existsSync(TEST_DIR))
-		fs.rmdirSync(TEST_DIR, { recursive: true });
-
+	fs.rmSync(TEST_DIR, { recursive: true, force: true });
 	fs.mkdirSync(TEST_DIR);
 });
 
 afterEach(() => {
 	// Clean up the test directory.
-	if (fs.existsSync(TEST_DIR))
-		fs.rmdirSync(TEST_DIR, { recursive: true });
+	fs.rmSync(TEST_DIR, { recursive: true, force: true });
 });
 
 test('cmd: nwjs-installer', () => {
@@ -539,8 +535,7 @@ test('cmd: nwjs-installer --version 0.49.2 --downloadServer=localhost', async ()
 	const port = server.address().port;
 
 	// Make sure the cache is empty.
-	if (fs.existsSync(CACHE_DIR))
-		fs.rmdirSync(CACHE_DIR, { recursive: true });
+	fs.rmSync(CACHE_DIR, { recursive: true, force: true });
 
 	// Run the command.
 	execSync(`nwjs-installer --version 0.49.2 --downloadServer=http://localhost:${port}`, EXEC_OPTS);
