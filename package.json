@@ -9,7 +9,7 @@
 		"nwjs": "node --no-warnings index.js"
 	},
 	"bin": {
-		"nwjs": "./index.js"
+		"nwjs-installer": "./index.js"
 	},
 	"repository": {
 		"type": "git",

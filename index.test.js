@@ -30,7 +30,7 @@ afterEach(() => {
 		fs.rmdirSync(TEST_DIR, { recursive: true });
 });
 
-test('cmd: nwjs', () => {
+test('cmd: nwjs-installer', () => {
 	// Expect default behavior:
 	// - nw.js will be installed into the current working directory (which is TEST_DIR).
 	// - Latest version of nw.js will automatically be downloaded.
@@ -38,7 +38,7 @@ test('cmd: nwjs', () => {
 	// - ZIP/TAR will be cached in the operating system's temp directory.
 	// - Build flavor should be "normal" not "sdk".
 	// - Build should not be a pre-release.
-	execSync(`nwjs`, EXEC_OPTS);
+	execSync(`nwjs-installer`, EXEC_OPTS);
 
 	// Expect the nw.js executable to be in the current working directory.
 	if (process.platform === 'linux')
@@ -53,9 +53,9 @@ test('cmd: nwjs', () => {
 	expect(cacheFiles[0]).toMatch(/nwjs-v\d+\.\d+\.\d+-\w+-\w+\.(zip|tar\.gz)/);
 });
 
-test('cmd: nwjs --version 0.49.2', () => {
+test('cmd: nwjs-installer --version 0.49.2', () => {
 	// Expect the specified version to be installed.
-	execSync(`nwjs --version 0.49.2`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2`, EXEC_OPTS);
 
 	if (process.platform === 'linux') {
 		expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
@@ -470,14 +470,14 @@ test('cmd: nwjs --version 0.49.2', () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs --version 0.49.2 (cache check)', () => {
+test('cmd: nwjs-installer --version 0.49.2 (cache check)', () => {
 	// Get the mtime of the cache file.
 	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	const cacheFile = cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/));
 	const cacheFileMtime = fs.statSync(path.join(CACHE_DIR, cacheFile)).mtimeMs;
 
 	// Run the command.
-	execSync(`nwjs --version 0.49.2`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2`, EXEC_OPTS);
 
 	// Cache file should not have been modified.
 	expect(fs.statSync(path.join(CACHE_DIR, cacheFile)).mtimeMs).toBe(cacheFileMtime);
@@ -491,14 +491,14 @@ test('cmd: nwjs --version 0.49.2 (cache check)', () => {
 		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
 });
 
-test('cmd: nwjs --version 0.49.2 --no-cache', () => {
+test('cmd: nwjs-installer --version 0.49.2 --no-cache', () => {
 	// Purposely poison the cache so that we can test that it's not used.
 	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	const cacheFile = cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/));
 	fs.writeFileSync(path.join(CACHE_DIR, cacheFile), 'poisoned');
 
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --no-cache`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --no-cache`, EXEC_OPTS);
 
 	// Cache file should be untouched.
 	expect(fs.readFileSync(path.join(CACHE_DIR, cacheFile), 'utf8')).toBe('poisoned');
@@ -515,7 +515,7 @@ test('cmd: nwjs --version 0.49.2 --no-cache', () => {
 	fs.unlinkSync(path.join(CACHE_DIR, cacheFile));
 });
 
-test('cmd: nwjs --version 0.49.2 --downloadServer=localhost', async () => {
+test('cmd: nwjs-installer --version 0.49.2 --downloadServer=localhost', async () => {
 	// Create a proxy server to test the download server option.
 	const server = http.createServer((req, res) => {
 		const proxyUrl = url.parse(`http://dl.nwjs.io${req.url}`);
@@ -543,7 +543,7 @@ test('cmd: nwjs --version 0.49.2 --downloadServer=localhost', async () => {
 		fs.rmdirSync(CACHE_DIR, { recursive: true });
 
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --downloadServer=http://localhost:${port}`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --downloadServer=http://localhost:${port}`, EXEC_OPTS);
 
 	// Stop the server.
 	await new Promise(resolve => server.close(resolve));
@@ -561,9 +561,9 @@ test('cmd: nwjs --version 0.49.2 --downloadServer=localhost', async () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs --version 0.49.2 --sdk', () => {
+test('cmd: nwjs-installer --version 0.49.2 --sdk', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --sdk`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --sdk`, EXEC_OPTS);
 
 	// Check nw.js SDK was installed.
 	if (process.platform === 'linux') {
@@ -582,9 +582,9 @@ test('cmd: nwjs --version 0.49.2 --sdk', () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-sdk-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs --version 0.48.0-beta1 (pre-release)', () => {
+test('cmd: nwjs-installer --version 0.48.0-beta1 (pre-release)', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.48.0-beta1`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.48.0-beta1`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -599,9 +599,9 @@ test('cmd: nwjs --version 0.48.0-beta1 (pre-release)', () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.48\.0-beta1-\w+-\w+\.(zip|tar\.gz)/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs --version 0.49.2 --platform win --arch x64', () => {
+test('cmd: nwjs-installer --version 0.49.2 --platform win --arch x64', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --platform win --arch x64`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --platform win --arch x64`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
@@ -611,9 +611,9 @@ test('cmd: nwjs --version 0.49.2 --platform win --arch x64', () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-win-x64\.zip/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs --version 0.49.2 --platform win --arch ia32', () => {
+test('cmd: nwjs-installer --version 0.49.2 --platform win --arch ia32', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --platform win --arch ia32`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --platform win --arch ia32`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
@@ -623,9 +623,9 @@ test('cmd: nwjs --version 0.49.2 --platform win --arch ia32', () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-win-ia32\.zip/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs --version 0.49.2 --platform linux --arch x64', () => {
+test('cmd: nwjs-installer --version 0.49.2 --platform linux --arch x64', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --platform linux --arch x64`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --platform linux --arch x64`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
@@ -635,9 +635,9 @@ test('cmd: nwjs --version 0.49.2 --platform linux --arch x64', () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-linux-x64\.tar\.gz/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs --version 0.49.2 --platform linux --arch ia32', () => {
+test('cmd: nwjs-installer --version 0.49.2 --platform linux --arch ia32', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --platform linux --arch ia32`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --platform linux --arch ia32`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
@@ -647,9 +647,9 @@ test('cmd: nwjs --version 0.49.2 --platform linux --arch ia32', () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-linux-ia32\.tar\.gz/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs --version 0.49.2 --platform osx --arch x64', () => {
+test('cmd: nwjs-installer --version 0.49.2 --platform osx --arch x64', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --platform osx --arch x64`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --platform osx --arch x64`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
@@ -659,9 +659,9 @@ test('cmd: nwjs --version 0.49.2 --platform osx --arch x64', () => {
 	expect(cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-osx-x64\.zip/))).not.toBeUndefined();
 });
 
-test('cmd: nwjs --version 0.49.2 --target-dir="./test"', () => {
+test('cmd: nwjs-installer --version 0.49.2 --target-dir="./test"', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --target-dir="./test"`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --target-dir="./test"`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -672,9 +672,9 @@ test('cmd: nwjs --version 0.49.2 --target-dir="./test"', () => {
 		expect(fs.existsSync(path.join(TEST_DIR, 'test', 'nwjs.app'))).toBe(true);
 });
 
-test('cmd: nwjs --version 0.49.2 --target-dir="./{version}/{platform}/{arch}/{flavor}"', () => {
+test('cmd: nwjs-installer --version 0.49.2 --target-dir="./{version}/{platform}/{arch}/{flavor}"', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --target-dir="./{version}/{platform}/{arch}/{flavor}"`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --target-dir="./{version}/{platform}/{arch}/{flavor}"`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -685,9 +685,9 @@ test('cmd: nwjs --version 0.49.2 --target-dir="./{version}/{platform}/{arch}/{fl
 		expect(fs.existsSync(path.join(TEST_DIR, '0.49.2', 'osx', 'x64', 'normal', 'nwjs.app'))).toBe(true);
 });
 
-test('cmd: nwjs --version 0.49.2 --target-dir="./{version}/{platform}/{arch}/{flavor}" --sdk', () => {
+test('cmd: nwjs-installer --version 0.49.2 --target-dir="./{version}/{platform}/{arch}/{flavor}" --sdk', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --target-dir="./{version}/{platform}/{arch}/{flavor}" --sdk`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --target-dir="./{version}/{platform}/{arch}/{flavor}" --sdk`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -698,9 +698,9 @@ test('cmd: nwjs --version 0.49.2 --target-dir="./{version}/{platform}/{arch}/{fl
 		expect(fs.existsSync(path.join(TEST_DIR, '0.49.2', 'osx', 'x64', 'sdk', 'nwjs.app'))).toBe(true);
 });
 
-test('cmd: nwjs --version 0.49.2 --target-dir="./{package}"', () => {
+test('cmd: nwjs-installer --version 0.49.2 --target-dir="./{package}"', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --target-dir="./{package}"`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --target-dir="./{package}"`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -711,9 +711,9 @@ test('cmd: nwjs --version 0.49.2 --target-dir="./{package}"', () => {
 		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs-v0.49.2-osx-x64', 'nwjs.app'))).toBe(true);
 });
 
-test('cmd: nwjs --version 0.49.2 --target-dir="./{package}" --sdk', () => {
+test('cmd: nwjs-installer --version 0.49.2 --target-dir="./{package}" --sdk', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --target-dir="./{package}" --sdk`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --target-dir="./{package}" --sdk`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -724,9 +724,9 @@ test('cmd: nwjs --version 0.49.2 --target-dir="./{package}" --sdk', () => {
 		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs-sdk-v0.49.2-osx-x64', 'nwjs.app'))).toBe(true);
 });
 
-test('cmd: nwjs --version 0.49.2 --locale "el,en-GB,en_US"', () => {
+test('cmd: nwjs-installer --version 0.49.2 --locale "el,en-GB,en_US"', () => {
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --locale "el,en-GB,en_US"`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --locale "el,en-GB,en_US"`, EXEC_OPTS);
 
 	// Check if the locale files are the only ones downloaded.
 	if (process.platform === 'linux' || process.platform === 'win32') {
@@ -754,11 +754,11 @@ test('cmd: nwjs --version 0.49.2 --locale "el,en-GB,en_US"', () => {
 	}
 });
 
-test('cmd: nwjs --version 0.49.2 --remove-pak-info', () => {
+test('cmd: nwjs-installer --version 0.49.2 --remove-pak-info', () => {
 	// See: https://bitbucket.org/chromiumembedded/cef/issues/2375
 	if (process.platform === 'linux' || process.platform === 'win32') {
 		// Run the command.
-		execSync(`nwjs --version 0.49.2 --remove-pak-info`, EXEC_OPTS);
+		execSync(`nwjs-installer --version 0.49.2 --remove-pak-info`, EXEC_OPTS);
 
 		// Check there are no .pak.info files extracted to /locales
 		const localeFiles = fs.readdirSync(path.join(TEST_DIR, 'locales'));
@@ -766,12 +766,12 @@ test('cmd: nwjs --version 0.49.2 --remove-pak-info', () => {
 	}
 });
 
-test('cmd: nwjs --version 0.49.2 --exclude "^credits.html$"', () => {
+test('cmd: nwjs-installer --version 0.49.2 --exclude "^credits.html$"', () => {
 	// Use credits.html for testing since it's the only file that exists in the same
 	// directory on all platforms.
 
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --exclude "^credits.html$"`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --exclude "^credits.html$"`, EXEC_OPTS);
 
 	// Check nw.js was installed.
 	if (process.platform === 'linux')
@@ -786,7 +786,7 @@ test('cmd: nwjs --version 0.49.2 --exclude "^credits.html$"', () => {
 });
 
 // This test should ideally be left until last.
-test('cmd: nwjs --version 0.49.2 --clear-cache', () => {
+test('cmd: nwjs-installer --version 0.49.2 --clear-cache', () => {
 	// Ensure cache directory exists.
 	if (!fs.existsSync(CACHE_DIR))
 		fs.mkdirSync(CACHE_DIR);
@@ -795,7 +795,7 @@ test('cmd: nwjs --version 0.49.2 --clear-cache', () => {
 	fs.writeFileSync(path.join(CACHE_DIR, 'cacheJunk.zip'), 'junk');
 
 	// Run the command.
-	execSync(`nwjs --version 0.49.2 --clear-cache`, EXEC_OPTS);
+	execSync(`nwjs-installer --version 0.49.2 --clear-cache`, EXEC_OPTS);
 
 	const cacheFiles = fs.readdirSync(CACHE_DIR);
 	expect(cacheFiles.length).toBe(1);

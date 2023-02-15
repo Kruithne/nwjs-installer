@@ -15,7 +15,7 @@ try {
 	log.blank();
 
 	argv.help({
-		usage: 'Usage: $ nwjs [{options}]',
+		usage: 'Usage: $ nwjs-installer [{options}]',
 		url: info.homepage,
 		entries: [
 			{ name: '--help', description: 'Show this help message and exit.' },

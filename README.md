@@ -18,7 +18,7 @@ npm install nwjs-installer -g
 
 ## Usage
 ```bash
-Usage: nwjs [options]
+Usage: nwjs-installer [options]
 
 Options:
   --help                Show this help message and exit.
@@ -52,12 +52,12 @@ Options:
 Using the `--version <version>` option you can specify a specific version of nw.js to install. This should be a valid version number such as `0.49.2` or `0.48.0-beta1`.
 
 ```bash
-nwjs --version 0.48.0-beta1
+nwjs-installer --version 0.48.0-beta1
 ```
 If no version is specified, the latest stable version will be installed. This is determined by querying the directory listing of the download server.
 
 ```bash
-nwjs # No version, latest is installed.
+nwjs-installer # No version, latest is installed.
 ```
 
 ### Target Directory
@@ -65,7 +65,7 @@ nwjs # No version, latest is installed.
 By default, nw.js will be installed in the current working directory. To specify your own target directory, use the `--target-dir` option.
 
 ```bash
-nwjs --target-dir /path/to/target # Installs to /path/to/target.
+nwjs-installer --target-dir /path/to/target # Installs to /path/to/target.
 ```
 Keep in mind that files will be overwritten if they already exist in the target directory.
 
@@ -81,8 +81,8 @@ The `--target-directory` option also supports some substitution variables that c
 | `{package}` | The name of the package being installed. | `nwjs-v0.49.2-win-x64` |
 
 ```bash
-nwjs --target-dir="/{package}" # Installs to /nwjs-v0.49.2-win-x64
-nwjs --sdk --target-dir="/{version}/{flavor}" # Installs to /0.49.2/sdk
+nwjs-installer --target-dir="/{package}" # Installs to /nwjs-v0.49.2-win-x64
+nwjs-installer --sdk --target-dir="/{version}/{flavor}" # Installs to /0.49.2/sdk
 ```
 
 ### Platform / Architecture
@@ -90,7 +90,7 @@ nwjs --sdk --target-dir="/{version}/{flavor}" # Installs to /0.49.2/sdk
 By default, the platform and architecture of the current system will be used. If you wish to override this, use the `--platform` and `--arch` options.
 
 ```bash
-nwjs --platform win --arch x64 # Installs latest stable build for Windows x64.
+nwjs-installer --platform win --arch x64 # Installs latest stable build for Windows x64.
 ```
 
 > *Note*: For compatibility with the Node.js API, the platform `win32` is treated as `win` and the platform `darwin` is treated as `osx`.
@@ -115,13 +115,13 @@ Path: os.tmpdir() + '/nwjs-installer-cache/' + package
 To disable this behavior, use the `--no-cache` option. The cache will not be checked or updated when this option is used.
 
 ```bash
-nwjs --no-cache # Disables caching.
+nwjs-installer --no-cache # Disables caching.
 ```
 
 Additionally, the `--clear-cache` option can be used to clear the cache before a build starts. The cache will still be used unless `--no-cache` is also set.
 
 ```bash
-nwjs --clear-cache # Clears the cache before installing.
+nwjs-installer --clear-cache # Clears the cache before installing.
 ```
 
 ### Development Build (SDK)
@@ -129,7 +129,7 @@ nwjs --clear-cache # Clears the cache before installing.
 By default, the normal flavor of nw.js will be installed. If you wish to install the SDK flavor instead, use the `--sdk` option.
 
 ```bash
-nwjs --sdk # Installs latest stable SDK build.
+nwjs-installer --sdk # Installs latest stable SDK build.
 ```
 
 ### Excluding Files
@@ -137,8 +137,8 @@ nwjs --sdk # Installs latest stable SDK build.
 Providing the `--exclude <pattern>` option allows you to exclude files that match the pattern from the build. The pattern should be a valid [regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions).
 
 ```bash
-nwjs --exclude "^credits.html$" # Excludes credits.html from the build.
-nwjs --exclude "\.pak\.info$" # Excludes all .pak.info files from the build.
+nwjs-installer --exclude "^credits.html$" # Excludes credits.html from the build.
+nwjs-installer --exclude "\.pak\.info$" # Excludes all .pak.info files from the build.
 ```
 
 Notes on file exclusion:
@@ -151,7 +151,7 @@ Notes on file exclusion:
 By default, the utility will use the [official download server](https://dl.nwjs.io/) when downloading builds. If you wish to use a different server, use the `--download-server` option.
 
 ```bash
-nwjs --download-server https://example.com/
+nwjs-installer --download-server https://example.com/
 ```
 
 Notes on custom download servers:
@@ -168,7 +168,7 @@ By default, builds come with locale files for [all languages supported by Chromi
 You can find a list of locales supported by Chromium [here](https://chromium.googlesource.com/chromium/src/build/config/+/refs/heads/main/locales.gni).
 
 ```bash
-nwjs --locale "sw,en-GB,en_US"
+nwjs-installer --locale "sw,en-GB,en_US"
 ```
 
 Notes on locale:
@@ -184,7 +184,7 @@ During the Chromium build process for Windows and Linux builds, a `.pak.info` fi
 These files are not needed and can be safely removed. To help with this, `nwjs-installer` will automatically remove these if the `--remove-pak-info` option is used.
 
 ```bash
-nwjs --remove-pak-info # Removes .pak.info files.
+nwjs-installer --remove-pak-info # Removes .pak.info files.
 ```
 
 The `--remove-pak-info` is a more convinient and readable way of doing `--exclude "^locales\/([^.]+)\.pak\.info|$"` (see [Excluding Files](#excluding-files)) and skips OSX builds as they do not include these files.
