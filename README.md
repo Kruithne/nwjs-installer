@@ -2,7 +2,7 @@
 
 # nwjs-installer &middot; ![tests status](https://github.com/Kruithne/nwjs-installer/actions/workflows/github-actions-test.yml/badge.svg) ![typescript](https://img.shields.io/badge/language-typescript-blue) [![license badge](https://img.shields.io/github/license/Kruithne/nwjs-installer?color=blue)](LICENSE) ![npm version](https://img.shields.io/npm/v/nwjs-installer?color=blue)
 
-`nwjs-installer` is a command-line utility written in [Node.js](https://nodejs.org/) that streamlines the process of preparing a [nw.js](https://nwjs.io/) distribution.
+`nwjs-installer` is a command-line utility written in [Node.js](https://nodejs.org/) that streamlines the process of installing a [nw.js](https://nwjs.io/) distribution.
 
 This utility is intended for use in automated build pipelines or for development and testing purposes.
 
