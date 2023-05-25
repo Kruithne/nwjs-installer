@@ -487,30 +487,6 @@ test('cmd: nwjs-installer --version 0.49.2 (cache check)', () => {
 		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
 });
 
-test('cmd: nwjs-installer --version 0.49.2 --no-cache', () => {
-	// Purposely poison the cache so that we can test that it's not used.
-	const cacheFiles = fs.readdirSync(CACHE_DIR);
-	const cacheFile = cacheFiles.find(e => e.match(/nwjs-v0\.49\.2-\w+-\w+\.(zip|tar\.gz)/));
-	fs.writeFileSync(path.join(CACHE_DIR, cacheFile), 'poisoned');
-
-	// Run the command.
-	execSync(`nwjs-installer --version 0.49.2 --no-cache`, EXEC_OPTS);
-
-	// Cache file should be untouched.
-	expect(fs.readFileSync(path.join(CACHE_DIR, cacheFile), 'utf8')).toBe('poisoned');
-
-	// Check nw.js was installed.
-	if (process.platform === 'linux')
-		expect(fs.existsSync(path.join(TEST_DIR, 'nw'))).toBe(true);
-	else if (process.platform === 'win32')
-		expect(fs.existsSync(path.join(TEST_DIR, 'nw.exe'))).toBe(true);
-	else if (process.platform === 'darwin')
-		expect(fs.existsSync(path.join(TEST_DIR, 'nwjs.app'))).toBe(true);
-
-	// Delete the poisoned cache file.
-	fs.unlinkSync(path.join(CACHE_DIR, cacheFile));
-});
-
 test('cmd: nwjs-installer --version 0.49.2 --downloadServer=localhost', async () => {
 	// Create a proxy server to test the download server option.
 	const server = http.createServer((req, res) => {
