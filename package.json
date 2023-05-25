@@ -35,8 +35,7 @@
 	"dependencies": {
 		"@kogs/argv": "^1.2.0",
 		"@kogs/logger": "^3.3.7",
-		"jszip": "^3.10.1",
-		"tar": "^6.1.13"
+		"jszip": "^3.10.1"
 	},
 	"devDependencies": {
 		"@types/node": "^18.11.18",

@@ -2,8 +2,8 @@
 import { parse } from '@kogs/argv';
 import log, { formatArray } from '@kogs/logger';
 import info from './package.json' assert { type: 'json' };
+import { execSync } from 'node:child_process';
 import path from 'node:path';
-import tar from 'tar';
 import jszip from 'jszip';
 import os from 'node:os';
 import fs from 'node:fs';
@@ -163,7 +163,7 @@ try {
 
 		data = Buffer.from(await res.arrayBuffer());
 
-		if (useCache) {
+		if (useCache || archiveType === 'tar') {
 			fs.writeFileSync(cachePath, data);
 			log.info('Caching archive at {%s}', cachePath);
 		}
@@ -202,40 +202,44 @@ try {
 
 	const excludeRegExp = excludePattern ? new RegExp(excludePattern, 'i') : undefined;
 	if (archiveType === 'tar') {
-		const extract = tar.list({
-			onentry: (entry: tar.Header) => {
-				if (entry.type !== 'File')
-					return;
+		const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'nwjs-'));
 
-				// Drop the root directory from the path.
-				const entryPath = entry.path.split('/').splice(1).join('/');
+		log.info('Extracting archive to {%s}', tmp);
+		execSync(`tar -xf ${cachePath} -C ${tmp}`);
 
-				const filePath = path.join(targetDir, entryPath);
-				const fileDir = path.dirname(filePath);
+		const extracted = path.join(tmp, fs.readdirSync(tmp)[0]);
+		const copyFiles = (src = './') => {
+			const srcPath = path.join(extracted, src);
+
+			const files = fs.readdirSync(srcPath, { withFileTypes: true });
+
+			for (const entry of files) {
+				const entryPath = path.posix.join(src, entry.name);
+				const sourcePath = path.join(srcPath, entry.name);
+				const targetPath = path.join(targetDir, src, entry.name);
 
 				if (!localeFilter(entryPath)) {
-					log.info('Skipping {%s} (does not match --locale)', filePath);
-					return;
+					log.info('Skipping {%s} (does not match --locale)', targetPath);
+					continue;
 				}
 
 				if (excludeRegExp && excludeRegExp.test(entryPath)) {
-					log.info('Skipping {%s} (matches --exclude)', filePath);
-					return;
+					log.info('Skipping {%s} (matches --exclude)', targetPath);
+					continue;
 				}
 
-				// Ensure directory exists.
-				fs.mkdirSync(fileDir, { recursive: true });
+				if (entry.isDirectory()) {
+					copyFiles(entryPath);
+				} else {
+					fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+					fs.copyFileSync(sourcePath, targetPath);
 
-				// Write file.
-				entry.on('end', () => log.success('Extracted {%s}', filePath));
-				entry.pipe(fs.createWriteStream(filePath));
+					log.success('Extracted {%s}', targetPath);
+				}
 			}
-		});
+		};
 
-		await new Promise(resolve => {
-			extract.on('end', resolve);
-			extract.end(data);
-		});
+		copyFiles();
 	} else if (archiveType === 'zip') {
 		const zip = await jszip.loadAsync(data);
 		const promises = [];
@@ -273,6 +277,9 @@ try {
 	} else {
 		throw new Error('Archive format {' + archiveType + '} not implemented');
 	}
+
+	if (!useCache && archiveType === 'tar')
+		fs.unlinkSync(cachePath);
 } catch (err) {
 	log.error('{Failed} %s: ' + err.message, err.name);
 	process.exit(1);
